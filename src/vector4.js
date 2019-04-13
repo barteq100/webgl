@@ -1,4 +1,5 @@
 import {Matrix4} from "./matrix4";
+import {Vector3} from "./vector3";
 
 export class Vector4 {
 
@@ -16,5 +17,9 @@ export class Vector4 {
             matrix.n31 * this.x + matrix.n32 * this.y + matrix.n33 * this.z + matrix.n34 * this.w,
             matrix.n41 * this.x + matrix.n42 * this.y + matrix.n43 * this.z + matrix.n44 * this.w
         );
+    }
+
+    toVector3(){
+        return new Vector3(this.x, this.y, this.z);
     }
 }
