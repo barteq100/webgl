@@ -86,6 +86,7 @@ export class Matrix4 {
         multiplied.n42 = m1.n41 * m2.n12 + m1.n42 * m2.n22 + m1.n43 * m2.n32 + m1.n44 * m2.n42;
         multiplied.n43 = m1.n41 * m2.n13 + m1.n42 * m2.n23 + m1.n43 * m2.n33 + m1.n44 * m2.n43;
         multiplied.n44 = m1.n41 * m2.n14 + m1.n42 * m2.n24 + m1.n43 * m2.n34 + m1.n44 * m2.n44;
+        return multiplied;
     }
 
     multiply(m: Matrix4) {

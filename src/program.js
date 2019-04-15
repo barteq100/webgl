@@ -1,3 +1,5 @@
+import {compileShader, createProgram} from "./webgl-utils";
+
 export class Program {
     constructor(gl, vertexShaderScript, fragmentShaderScript) {
         this.vertexShader = compileShader(gl, vertexShaderScript, gl.VERTEX_SHADER);
