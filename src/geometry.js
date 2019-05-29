@@ -15,7 +15,7 @@ export class Geometry {
     set color(color: Vector4) {
         const newColors = [];
         for (let i = 0; i < this.positions.length; i++) {
-            newColors.push(color);
+            newColors.push(color.x, color.y, color.z, color.w);
         }
         this._colors = new Float32Array(newColors);
     }
