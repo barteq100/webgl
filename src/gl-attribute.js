@@ -1,11 +1,9 @@
 export class GLAttribute{
-    constructor(gl, program, name, numberOfComponents, data) {
+    constructor(gl, program, name, numberOfComponents) {
         this.gl = gl;
         this.numOfComp = numberOfComponents;
         this.location = gl.getAttribLocation(program, name);
         this.buffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
     }
 
     BindData(data){
@@ -15,6 +13,7 @@ export class GLAttribute{
 
     Enable(){
         this.gl.enableVertexAttribArray(this.location);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
         var numComponents = this.numOfComp;  // (x, y, z)
         var type = this.gl.FLOAT;    // 32bit floating point values
         var normalize = false;  // leave the values as they are

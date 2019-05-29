@@ -1,5 +1,6 @@
 import {BasicObject} from "./basic-object";
 import {Geometry} from "./geometry";
+import {Vector4} from "./vector4";
 
 function main() {
     var canvas = document.getElementById("canvas");
@@ -14,6 +15,7 @@ function main() {
      0.25, -0.25, 0,
      0, 0.25, 0
     ], [],[],[]);
+    obj.Color = new Vector4(0.5, 0.5, 0.5, 1);
     var objects = [obj];
     drawScene();
     function drawScene() {

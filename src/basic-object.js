@@ -1,35 +1,20 @@
-import {Program} from "./program";
 import {Vector3} from "./vector3";
 import {Geometry} from "./geometry";
 import {Matrix4} from "./matrix4";
-import {GLAttribute} from "./gl-attribute";
+import {Material} from "./material";
+import {Vector4} from "./vector4";
 
 export class BasicObject {
 
     constructor(gl) {
         this.gl = gl;
-        this.vertexShaderScript =
-            '\r\n' +
-            'precision highp float;\r\n' +
-            'attribute vec4 a_position;\r\n' +
-            'void main(void) {\r\n' +
-            '    gl_Position = a_position;\r\n' +
-            '}\r\n';
-
-        this.fragmentShaderScript = '\r\n' +
-            'precision highp float;\r\n' +
-            'void main(void) {\r\n' +
-            '    gl_FragColor = vec4(0.3,0.1,0.1,0.7);\r\n' +
-            '}\r\n';
-
+        this.material = new Material(gl);
         this._position = new Vector3(0, 0 ,0);
         this._rotation = new Vector3(0, 0, 0);
         this._scale = new Vector3(1,1,1);
         this.geometry = new Geometry();
         this.modelMatrix = new Matrix4();
         this.recalculateModelMatrix();
-        this.program = new Program(gl, this.vertexShaderScript, this.fragmentShaderScript);
-        this.positionAttribute = new GLAttribute(gl, this.program.program, 'a_position', 3, this.geometry.positions);
     }
 
     set Position(newPosition: Vector3){
@@ -65,7 +50,11 @@ export class BasicObject {
 
     set Geometry(newGeometry: Geometry){
         this.geometry = newGeometry;
-        this.positionAttribute.BindData(this.geometry.positions);
+        this.material.geometry = this.geometry;
+    }
+
+    set Color(color: Vector4) {
+        this.material.color = color;
     }
 
     get ModelMatrix() {
@@ -79,9 +68,8 @@ export class BasicObject {
         this.modelMatrix = Matrix4.multiplyMatrices(scale, rotation).multiply(translation);
     }
 
-    render(){
-        this.gl.useProgram(this.program.program);
-        this.positionAttribute.Enable();
+    render() {
+        this.material.render();
         var primitiveType = this.gl.TRIANGLES;
         var offset = 0;
         var count = 3;
