@@ -19,7 +19,7 @@ export class Material {
             'varying vec4 v_color;\r\n' +
             'void main(void) {\r\n' +
             '    v_color = a_color;\r\n' +
-            '    gl_Position = u_projection * u_view * u_world * u_model * vec4(a_position, 1.0);\r\n' +
+            '    gl_Position = u_projection * u_view * u_model * vec4(a_position, 1.0);\r\n' +
             '}\r\n';
 
         this.fragmentShaderScript = '\r\n' +

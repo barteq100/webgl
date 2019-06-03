@@ -6,14 +6,16 @@ import {Vector3} from "./vector3";
 
 function main() {
     const canvas = document.getElementById("canvas");
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    canvas.width = w;
+    canvas.height = h;
     const gl = canvas.getContext("webgl");
     if (!gl) {
         return;
     }
-    const camera = new PerspectiveCamera(gl, 1.0471, canvas.width / canvas.height, 1, 50);
-    camera.Position = new Vector3(0, 0, 0);
+    const camera = new PerspectiveCamera(gl, 1.0471, canvas.width / canvas.height, 1/1000, 200);
+    camera.Position = new Vector3(0, 0, 10);
     var obj = new Mesh(gl, camera);
     obj.Geometry = new Geometry(gl, [
         -0.5, -0.5, 0,
@@ -21,9 +23,9 @@ function main() {
         0.5, 0.5, 0
     ], [], [], []);
     obj.VerticesColor = new Vector4(0.5, 0.5, 0.5, 1);
-    obj.Position = new Vector3(0,0,-10);
-    obj.Scale = new Vector3(4,4,4);
-    camera.lookAt(obj.Position, new Vector3(0, 1, 0));
+    obj.Position = new Vector3(0,0,-5);
+    obj.Scale = new Vector3(2,2,2);
+    //camera.lookAt(obj.Position, new Vector3(0, 1, 0));
     var objects = [obj];
     drawScene();
 
@@ -37,7 +39,7 @@ function main() {
 
         // Turn on culling. By default backfacing triangles
         // // will be culled.
-        gl.enable(gl.CULL_FACE);
+        // gl.enable(gl.CULL_FACE);
         //
         // // Enable the depth buffer
         // gl.enable(gl.DEPTH_TEST);
