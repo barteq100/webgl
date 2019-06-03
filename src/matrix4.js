@@ -51,8 +51,8 @@ export class Matrix4 {
         const cos = Math.cos(radians);
         const sin = Math.sin(radians);
         rotationMatrix.n22 = cos;
-        rotationMatrix.n23 = sin;
-        rotationMatrix.n32 = -sin;
+        rotationMatrix.n23 = -sin;
+        rotationMatrix.n32 = sin;
         rotationMatrix.n33 = cos;
         return rotationMatrix;
     }
@@ -62,8 +62,8 @@ export class Matrix4 {
         const cos = Math.cos(radians);
         const sin = Math.sin(radians);
         rotationMatrix.n11 = cos;
-        rotationMatrix.n13 = -sin;
-        rotationMatrix.n31 = sin;
+        rotationMatrix.n13 = sin;
+        rotationMatrix.n31 = -sin;
         rotationMatrix.n33 = cos;
         return rotationMatrix;
     }
@@ -73,8 +73,8 @@ export class Matrix4 {
         const cos = Math.cos(radians);
         const sin = Math.sin(radians);
         rotationMatrix.n11 = cos;
-        rotationMatrix.n12 = sin;
-        rotationMatrix.n21 = -sin;
+        rotationMatrix.n12 = -sin;
+        rotationMatrix.n21 = sin;
         rotationMatrix.n22 = cos;
         return rotationMatrix;
     }
