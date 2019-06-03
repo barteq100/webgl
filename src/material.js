@@ -10,7 +10,6 @@ export class Material {
         this.vertexShaderScript =
             '\r\n' +
             'precision highp float;\r\n' +
-            'uniform mat4 u_world;\r\n' +
             'uniform mat4 u_model;\r\n' +
             'uniform mat4 u_view;\r\n' +
             'uniform mat4 u_projection;\r\n' +
@@ -19,7 +18,7 @@ export class Material {
             'varying vec4 v_color;\r\n' +
             'void main(void) {\r\n' +
             '    v_color = a_color;\r\n' +
-            '    gl_Position = u_projection * u_view * u_model * vec4(a_position, 1.0);\r\n' +
+            '    gl_Position = u_projection * u_view *  u_model * vec4(a_position, 1.0);\r\n' +
             '}\r\n';
 
         this.fragmentShaderScript = '\r\n' +
@@ -29,7 +28,6 @@ export class Material {
             '    gl_FragColor = v_color;\r\n' +
             '}\r\n';
         this.program = new Program(gl, this.vertexShaderScript, this.fragmentShaderScript);
-        this.world = new GLUniform(gl, this.program.program, 'u_world', UniformType.MATRIX4);
         this.model = new GLUniform(gl, this.program.program, 'u_model', UniformType.MATRIX4);
         this.view = new GLUniform(gl, this.program.program, 'u_view', UniformType.MATRIX4);
         this.projection = new GLUniform(gl, this.program.program, 'u_projection', UniformType.MATRIX4);
@@ -40,11 +38,10 @@ export class Material {
         this._color = color;
     }
 
-    render(positions: WebGLBuffer, colors: WebGLBuffer, world: Float32List, model: Float32List, view: Float32List, projection: Float32List,) {
+    render(positions: WebGLBuffer, colors: WebGLBuffer, model: Float32List, view: Float32List, projection: Float32List,) {
         this.gl.useProgram(this.program.program);
         this.positionAttribute.Enable(positions);
         this.colorAttribute.Enable(colors);
-        this.world.Enable(world);
         this.model.Enable(model);
         this.view.Enable(view);
         this.projection.Enable(projection);
