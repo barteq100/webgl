@@ -11,7 +11,7 @@ function main() {
         return;
     }
     const camera = new PerspectiveCamera(gl, 1.0471, gl.canvas.width / gl.canvas.height, 1/1000, 200);
-    camera.Position = new Vector3(0, 0, 50);
+    camera.Position = new Vector3(0, 0, 0);
     var obj = new Mesh(gl, camera);
     obj.Geometry = new Geometry(gl, [
         -0.5, -0.5, 0,
@@ -19,6 +19,7 @@ function main() {
         0.5, 0.5, 0
     ], [], [], []);
     obj.VerticesColor = new Vector4(0.5, 0.5, 0.5, 1);
+    obj.Position = new Vector3(0,0,-5);
     camera.lookAt(obj.Position, new Vector3(0, 1, 0));
     var objects = [obj];
     drawScene();
@@ -41,6 +42,7 @@ function main() {
         for (const obj of objects) {
             obj.render();
         }
+        window.requestAnimationFrame(drawScene);
     }
 }
 

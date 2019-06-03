@@ -54,7 +54,7 @@ export class BasicObject {
         const translation = Matrix4.getTranslation(this._position);
         const rotation = Matrix4.getRotation(this._rotation);
         const scale = Matrix4.getScaling(this._scale);
-        this.modelMatrix = Matrix4.multiplyMatrices(scale, rotation).multiply(translation);
+        this.modelMatrix = Matrix4.multiplyMatrices(translation, rotation).multiply(scale);
     }
 
     lookAt(target: Vector3, up: Vector3) {

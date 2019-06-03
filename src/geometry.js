@@ -43,9 +43,13 @@ export class Geometry {
     }
 
     get positionsBuffer(): WebGLBuffer {
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._positionsBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.positions, this.gl.STATIC_DRAW);
         return this._positionsBuffer;
     }
     get colorsBuffer(): WebGLBuffer {
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._colorsBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this._colors, this.gl.STATIC_DRAW);
         return this._colorsBuffer;
     }
 
