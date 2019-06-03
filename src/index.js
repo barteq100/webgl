@@ -22,6 +22,7 @@ function main() {
     ], [], [], []);
     obj.VerticesColor = new Vector4(0.5, 0.5, 0.5, 1);
     obj.Position = new Vector3(0,0,-10);
+    obj.Scale = new Vector3(4,4,4);
     camera.lookAt(obj.Position, new Vector3(0, 1, 0));
     var objects = [obj];
     drawScene();
