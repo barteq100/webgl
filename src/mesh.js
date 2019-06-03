@@ -34,8 +34,8 @@ export class Mesh extends BasicObject {
 
     render() {
         this.material.render(this.geometry.positionsBuffer, this.geometry.colorsBuffer,
-            this.camera.cameraMatrix.toTransposedFloat32List(), this.modelMatrix.toTransposedFloat32List(),
-            this.camera.ViewMatrix.toTransposedFloat32List(), this.camera.ProjectionMatrix.toFloat32List());
+            this.camera.cameraMatrix.toFloat32List(), this.modelMatrix.toFloat32List(),
+            this.camera.ViewMatrix.toFloat32List(), this.camera.ProjectionMatrix.toFloat32List());
         var primitiveType = this.gl.TRIANGLES;
         var offset = 0;
         var count = this.geometry.positions.length / 3;
