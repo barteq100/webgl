@@ -142,24 +142,26 @@ export class Matrix4 {
     }
 
     static perspective(fov, aspect, near, far) {
-        var f = 1.0 / Math.tan(fov / 2);
-        var rangeInv = 1 / (near - far);
+        const r = fov * aspect;
+        const l = -4;
+        const t = r;
+        const b = l;
         const matrix = new Matrix4();
-        matrix.n11 = f / aspect;
+        matrix.n11 = (2 * near) / (r - l);
         matrix.n12 = 0;
-        matrix.n13 = 0;
+        matrix.n13 = (r+l)/(r-l);
         matrix.n14 = 0;
         matrix.n21 = 0;
-        matrix.n22 = f;
-        matrix.n23 = 0;
+        matrix.n22 = (2 * near) / (t - b);
+        matrix.n23 = (t+b)/(t-b);
         matrix.n24 = 0;
         matrix.n31 = 0;
         matrix.n32 = 0;
-        matrix.n33 = (near + far) * rangeInv;
-        matrix.n34 = -1;
+        matrix.n33 = (near + far) / (near - far);
+        matrix.n34 = (2 * near * far) / (near - far);
         matrix.n41 = 0;
         matrix.n42 = 0;
-        matrix.n43 = near * far * rangeInv * 2;
+        matrix.n43 = -1;
         matrix.n44 = 0;
         return matrix;
     }
