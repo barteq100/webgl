@@ -3,6 +3,7 @@ import {Geometry} from "./geometry";
 import {Vector4} from "./vector4";
 import {PerspectiveCamera} from "./perspective-camera";
 import {Vector3} from "./vector3";
+import {Matrix4} from "./matrix4";
 
 export class Mesh extends BasicObject {
     constructor(gl: WebGLRenderingContext, camera: PerspectiveCamera) {
@@ -33,9 +34,9 @@ export class Mesh extends BasicObject {
     }
 
     render() {
+        const p1 = new Vector4(0.5, 0.5, 0, 1).multiplyByMatrix(Matrix4.multiplyMatrices(this.modelMatrix, this.camera.ViewMatrix).multiply(this.camera.ProjectionMatrix));
         this.material.render(this.geometry.positionsBuffer, this.geometry.colorsBuffer,
-            this.camera.cameraMatrix.toFloat32List(), this.modelMatrix.toFloat32List(),
-            this.camera.ViewMatrix.toFloat32List(), this.camera.ProjectionMatrix.toFloat32List());
+            this.modelMatrix.toFloat32List(), this.camera.ViewMatrix.toFloat32List(), this.camera.ProjectionMatrix.toFloat32List());
         var primitiveType = this.gl.TRIANGLES;
         var offset = 0;
         var count = this.geometry.positions.length / 3;
