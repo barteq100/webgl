@@ -65,18 +65,18 @@ export class BasicObject {
         this.modelMatrix.n11 = xAxis.x;
         this.modelMatrix.n12 = yAxis.x;
         this.modelMatrix.n13 = zAxis.x;
-        this.modelMatrix.n14 = this._position.x;
+        this.modelMatrix.n14 = 0;
         this.modelMatrix.n21 = xAxis.y;
         this.modelMatrix.n22 = yAxis.y;
         this.modelMatrix.n23 = zAxis.y;
-        this.modelMatrix.n24 = this._position.y;
+        this.modelMatrix.n24 = 0;
         this.modelMatrix.n31 = xAxis.z;
         this.modelMatrix.n32 = yAxis.z;
         this.modelMatrix.n33 = zAxis.z;
         this.modelMatrix.n34 = this._position.z;
-        this.modelMatrix.n41 = 0;
-        this.modelMatrix.n42 = 0;
-        this.modelMatrix.n43 = 0;
+        this.modelMatrix.n41 = this._position.x;
+        this.modelMatrix.n42 = this._position.y;
+        this.modelMatrix.n43 = this._position.z;
         this.modelMatrix.n44 = 1;
     }
 

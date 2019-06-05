@@ -35,9 +35,9 @@ export class Matrix4 {
 
     static getTranslation(vector: Vector3): Matrix4 {
         const translationMatrix = new Matrix4();
-        translationMatrix.n14 = vector.x;
-        translationMatrix.n24 = vector.y;
-        translationMatrix.n34 = vector.z;
+        translationMatrix.n41 = vector.x;
+        translationMatrix.n42 = vector.y;
+        translationMatrix.n43 = vector.z;
         return translationMatrix;
     }
 
@@ -142,8 +142,9 @@ export class Matrix4 {
     }
 
     static perspective(fov, aspect, near, far) {
-        var f = 1.0 / Math.tan(fov / 2);
-        var rangeInv = 1 / (near - far);
+        const f = Math.tan(Math.PI * 0.5 - 0.5 * fov);
+        const rangeInv = 1.0 / (near - far);
+
         const matrix = new Matrix4();
         matrix.n11 = f / aspect;
         matrix.n12 = 0;
@@ -156,10 +157,10 @@ export class Matrix4 {
         matrix.n31 = 0;
         matrix.n32 = 0;
         matrix.n33 = (near + far) * rangeInv;
-        matrix.n34 = -1;
+        matrix.n34 = near * far * rangeInv * 2;
         matrix.n41 = 0;
         matrix.n42 = 0;
-        matrix.n43 = near * far * rangeInv * 2;
+        matrix.n43 = -1;
         matrix.n44 = 0;
         return matrix;
     }
