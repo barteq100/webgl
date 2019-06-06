@@ -54,7 +54,7 @@ export class BasicObject {
         const translation = Matrix4.getTranslation(this._position);
         const rotation = Matrix4.getRotation(this._rotation);
         const scale = Matrix4.getScaling(this._scale);
-        this.modelMatrix = new Matrix4().multiply(scale).multiply(rotation).multiply(translation);
+        this.modelMatrix = new Matrix4().multiply(translation);
             //Matrix4.multiplyMatrices(translation, rotation).multiply(scale);
     }
 
@@ -63,17 +63,17 @@ export class BasicObject {
         const xAxis = Vector3.Cross(up, zAxis).Normalize();
         const yAxis = Vector3.Cross(zAxis, xAxis).Normalize();
         this.modelMatrix.n11 = xAxis.x;
-        this.modelMatrix.n12 = yAxis.x;
-        this.modelMatrix.n13 = zAxis.x;
+        this.modelMatrix.n12 = xAxis.y;
+        this.modelMatrix.n13 = xAxis.z;
         this.modelMatrix.n14 = 0;
-        this.modelMatrix.n21 = xAxis.y;
+        this.modelMatrix.n21 = yAxis.x;
         this.modelMatrix.n22 = yAxis.y;
-        this.modelMatrix.n23 = zAxis.y;
+        this.modelMatrix.n23 = yAxis.z;
         this.modelMatrix.n24 = 0;
-        this.modelMatrix.n31 = xAxis.z;
-        this.modelMatrix.n32 = yAxis.z;
+        this.modelMatrix.n31 = zAxis.x;
+        this.modelMatrix.n32 = zAxis.y;
         this.modelMatrix.n33 = zAxis.z;
-        this.modelMatrix.n34 = this._position.z;
+        this.modelMatrix.n34 = 0;
         this.modelMatrix.n41 = this._position.x;
         this.modelMatrix.n42 = this._position.y;
         this.modelMatrix.n43 = this._position.z;

@@ -157,54 +157,81 @@ export class Matrix4 {
         matrix.n31 = 0;
         matrix.n32 = 0;
         matrix.n33 = (near + far) * rangeInv;
-        matrix.n34 = near * far * rangeInv * 2;
+        matrix.n34 = -1;
         matrix.n41 = 0;
         matrix.n42 = 0;
-        matrix.n43 = -1;
+        matrix.n43 = near * far * rangeInv * 2;
         matrix.n44 = 0;
         return matrix;
     }
 
     static getInverseMatrix4(m: Matrix4): Matrix4 {
+        var tmp_0  = m.n33 * m.n44;
+        var tmp_1  = m.n43 * m.n34;
+        var tmp_2  = m.n23 * m.n44;
+        var tmp_3  = m.n43 * m.n24;
+        var tmp_4  = m.n23 * m.n34;
+        var tmp_5  = m.n33 * m.n24;
+        var tmp_6  = m.n13 * m.n44;
+        var tmp_7  = m.n43 * m.n14;
+        var tmp_8  = m.n13 * m.n34;
+        var tmp_9  = m.n33 * m.n14;
+        var tmp_10 = m.n13 * m.n24;
+        var tmp_11 = m.n23 * m.n14;
+        var tmp_12 = m.n31 * m.n42;
+        var tmp_13 = m.n41 * m.n32;
+        var tmp_14 = m.n21 * m.n42;
+        var tmp_15 = m.n41 * m.n22;
+        var tmp_16 = m.n21 * m.n32;
+        var tmp_17 = m.n31 * m.n22;
+        var tmp_18 = m.n11 * m.n42;
+        var tmp_19 = m.n41 * m.n12;
+        var tmp_20 = m.n11 * m.n32;
+        var tmp_21 = m.n31 * m.n12;
+        var tmp_22 = m.n11 * m.n22;
+        var tmp_23 = m.n21 * m.n12;
 
-        // based on http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
-        var
-            t11 = m.n23 * m.n34 * m.n42 - m.n24 * m.n33 * m.n42 + m.n24 * m.n32 * m.n43 - m.n22 * m.n34 * m.n43 - m.n23 * m.n32 * m.n44 + m.n22 * m.n33 * m.n44,
-            t12 = m.n14 * m.n33 * m.n42 - m.n13 * m.n34 * m.n42 - m.n14 * m.n32 * m.n43 + m.n12 * m.n34 * m.n43 + m.n13 * m.n32 * m.n44 - m.n12 * m.n33 * m.n44,
-            t13 = m.n13 * m.n24 * m.n42 - m.n14 * m.n23 * m.n42 + m.n14 * m.n22 * m.n43 - m.n12 * m.n24 * m.n43 - m.n13 * m.n22 * m.n44 + m.n12 * m.n23 * m.n44,
-            t14 = m.n14 * m.n23 * m.n32 - m.n13 * m.n24 * m.n32 - m.n14 * m.n22 * m.n33 + m.n12 * m.n24 * m.n33 + m.n13 * m.n22 * m.n34 - m.n12 * m.n23 * m.n34;
+        var t0 = (tmp_0 * m.n22 + tmp_3 * m.n32 + tmp_4 * m.n42) -
+            (tmp_1 * m.n22 + tmp_2 * m.n32 + tmp_5 * m.n42);
+        var t1 = (tmp_1 * m.n12 + tmp_6 * m.n32 + tmp_9 * m.n42) -
+            (tmp_0 * m.n12 + tmp_7 * m.n32 + tmp_8 * m.n42);
+        var t2 = (tmp_2 * m.n12 + tmp_7 * m.n22 + tmp_10 * m.n42) -
+            (tmp_3 * m.n12 + tmp_6 * m.n22 + tmp_11 * m.n42);
+        var t3 = (tmp_5 * m.n12 + tmp_8 * m.n22 + tmp_11 * m.n32) -
+            (tmp_4 * m.n12 + tmp_9 * m.n22 + tmp_10 * m.n32);
 
-        var det = m.n11 * t11 + m.n21 * t12 + m.n31 * t13 + m.n41 * t14;
+        var d = 1.0 / (m.n11 * t0 + m.n12 * t1 + m.n31 * t2 + m.n41 * t3);
+        const dst = new Matrix4();
+        dst.n11 = d * t0;
+        dst.n12 = d * t1;
+        dst.n13 = d * t2;
+        dst.n14 = d * t3;
+        dst.n21 = d * ((tmp_1 * m.n12 + tmp_2 * m.n31 + tmp_5 * m.n42) -
+            (tmp_0 * m.n12 + tmp_3 * m.n31 + tmp_4 * m.n42));
+        dst.n22 = d * ((tmp_0 * m.n11 + tmp_7 * m.n31 + tmp_8 * m.n41) -
+            (tmp_1 * m.n11 + tmp_6 * m.n31 + tmp_9 * m.n41));
+        dst.n23 = d * ((tmp_3 * m.n11 + tmp_6 * m.n21 + tmp_11 * m.n41) -
+            (tmp_2 * m.n11 + tmp_7 * m.n21 + tmp_10 * m.n41));
+        dst.n24 = d * ((tmp_4 * m.n11 + tmp_9 * m.n21 + tmp_10 * m.n31) -
+            (tmp_5 * m.n11 + tmp_8 * m.n21 + tmp_11 * m.n31));
+        dst.n31 = d * ((tmp_12 * m.n24 + tmp_15 * m.n34 + tmp_16 * m.n44) -
+            (tmp_13 * m.n24 + tmp_14 * m.n34 + tmp_17 * m.n44));
+        dst.n32 = d * ((tmp_13 * m.n14 + tmp_18 * m.n34 + tmp_21 * m.n44) -
+            (tmp_12 * m.n14 + tmp_19 * m.n34 + tmp_20 * m.n44));
+        dst.n33 = d * ((tmp_14 * m.n14 + tmp_19 * m.n24 + tmp_22 * m.n44) -
+            (tmp_15 * m.n14 + tmp_18 * m.n24 + tmp_23 * m.n44));
+        dst.n34 = d * ((tmp_17 * m.n14 + tmp_20 * m.n24 + tmp_23 * m.n34) -
+            (tmp_16 * m.n14 + tmp_21 * m.n24 + tmp_22 * m.n34));
+        dst.n41 = d * ((tmp_14 * m.n33 + tmp_17 * m.n43 + tmp_13 * m.n23) -
+            (tmp_16 * m.n43 + tmp_12 * m.n23 + tmp_15 * m.n33));
+        dst.n42 = d * ((tmp_20 * m.n43 + tmp_12 * m.n13 + tmp_19 * m.n33) -
+            (tmp_18 * m.n33 + tmp_21 * m.n43 + tmp_13 * m.n13));
+        dst.n43 = d * ((tmp_18 * m.n23 + tmp_23 * m.n43 + tmp_15 * m.n13) -
+            (tmp_22 * m.n43 + tmp_14 * m.n13 + tmp_19 * m.n23));
+        dst.n44 = d * ((tmp_22 * m.n33 + tmp_16 * m.n13 + tmp_21 * m.n23) -
+            (tmp_20 * m.n23 + tmp_23 * m.n33 + tmp_17 * m.n13));
 
-        if (det === 0) {
-
-            var msg = "can't invert matrix, determinant is 0";
-            throw new Error(msg);
-        }
-
-        var detInv = 1 / det;
-        var result: Matrix4 = Matrix4.getIdentity();
-        result.n11 = t11 * detInv;
-        result.n12 = (m.n24 * m.n33 * m.n41 - m.n23 * m.n34 * m.n41 - m.n24 * m.n31 * m.n43 + m.n21 * m.n34 * m.n43 + m.n23 * m.n31 * m.n44 - m.n21 * m.n33 * m.n44) * detInv;
-        result.n13 = (m.n22 * m.n34 * m.n41 - m.n24 * m.n32 * m.n41 + m.n24 * m.n31 * m.n42 - m.n21 * m.n34 * m.n42 - m.n22 * m.n31 * m.n44 + m.n21 * m.n32 * m.n44) * detInv;
-        result.n14 = (m.n23 * m.n32 * m.n41 - m.n22 * m.n33 * m.n41 - m.n23 * m.n31 * m.n42 + m.n21 * m.n33 * m.n42 + m.n22 * m.n31 * m.n43 - m.n21 * m.n32 * m.n43) * detInv;
-
-        result.n21 = t12 * detInv;
-        result.n22 = (m.n13 * m.n34 * m.n41 - m.n14 * m.n33 * m.n41 + m.n14 * m.n31 * m.n43 - m.n11 * m.n34 * m.n43 - m.n13 * m.n31 * m.n44 + m.n11 * m.n33 * m.n44) * detInv;
-        result.n23 = (m.n14 * m.n32 * m.n41 - m.n12 * m.n34 * m.n41 - m.n14 * m.n31 * m.n42 + m.n11 * m.n34 * m.n42 + m.n12 * m.n31 * m.n44 - m.n11 * m.n32 * m.n44) * detInv;
-        result.n24 = (m.n12 * m.n33 * m.n41 - m.n13 * m.n32 * m.n41 + m.n13 * m.n31 * m.n42 - m.n11 * m.n33 * m.n42 - m.n12 * m.n31 * m.n43 + m.n11 * m.n32 * m.n43) * detInv;
-
-        result.n31 = t13 * detInv;
-        result.n32 = (m.n14 * m.n23 * m.n41 - m.n13 * m.n24 * m.n41 - m.n14 * m.n21 * m.n43 + m.n11 * m.n24 * m.n43 + m.n13 * m.n21 * m.n44 - m.n11 * m.n23 * m.n44) * detInv;
-        result.n33 = (m.n12 * m.n24 * m.n41 - m.n14 * m.n22 * m.n41 + m.n14 * m.n21 * m.n42 - m.n11 * m.n24 * m.n42 - m.n12 * m.n21 * m.n44 + m.n11 * m.n22 * m.n44) * detInv;
-        result.n34 = (m.n13 * m.n22 * m.n41 - m.n12 * m.n23 * m.n41 - m.n13 * m.n21 * m.n42 + m.n11 * m.n23 * m.n42 + m.n12 * m.n21 * m.n43 - m.n11 * m.n22 * m.n43) * detInv;
-
-        result.n41 = t14 * detInv;
-        result.n42 = (m.n13 * m.n24 * m.n31 - m.n14 * m.n23 * m.n31 + m.n14 * m.n21 * m.n33 - m.n11 * m.n24 * m.n33 - m.n13 * m.n21 * m.n34 + m.n11 * m.n23 * m.n34) * detInv;
-        result.n43 = (m.n14 * m.n22 * m.n31 - m.n12 * m.n24 * m.n31 - m.n14 * m.n21 * m.n32 + m.n11 * m.n24 * m.n32 + m.n12 * m.n21 * m.n34 - m.n11 * m.n22 * m.n34) * detInv;
-        result.n44 = (m.n12 * m.n23 * m.n31 - m.n13 * m.n22 * m.n31 + m.n13 * m.n21 * m.n32 - m.n11 * m.n23 * m.n32 - m.n12 * m.n21 * m.n33 + m.n11 * m.n22 * m.n33) * detInv;
-
-        return result;
+        return dst;
     }
 
     toFloat32List(): Float32List {

@@ -34,7 +34,8 @@ export class Mesh extends BasicObject {
     }
 
     render() {
-        const p1 = new Vector4(0.5, 0.5, 0, 1).multiplyByMatrix(Matrix4.multiplyMatrices(this.modelMatrix, this.camera.ViewMatrix).multiply(this.camera.ProjectionMatrix));
+        const indentyCheck = new Matrix4().multiply(this.camera.modelMatrix).multiply(this.camera.ViewMatrix);
+        const p1 = new Vector4(0.5, 0.5, 0, 1).multiplyByMatrix(new Matrix4().multiply(this.modelMatrix).multiply(this.camera.ViewMatrix).multiply(this.camera.ProjectionMatrix));
         this.material.render(this.geometry.positionsBuffer, this.geometry.colorsBuffer,
             this.modelMatrix.toFloat32List(), this.camera.ViewMatrix.toFloat32List(), this.camera.ProjectionMatrix.toFloat32List());
         var primitiveType = this.gl.TRIANGLES;
