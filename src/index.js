@@ -8,6 +8,7 @@ function main() {
     const canvas = document.getElementById("canvas");
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
+    let lastTime = 0;
     canvas.width = w;
     canvas.height = h;
     const gl = canvas.getContext("webgl");
@@ -15,34 +16,69 @@ function main() {
         return;
     }
     const camera = new PerspectiveCamera(gl, 1.0471, canvas.width / canvas.height, 1/1000, 200);
-    camera.Position = new Vector3(0, 0, 10);
+    camera.Position = new Vector3(0, 5, 10);
     var obj = new Mesh(gl, camera);
     obj.Geometry = new Geometry(gl, [
-        -0.5, -0.5, 0,
-        0.5, -0.5, 0,
-        0.5, 0.5, 0
+        -1.0,-1.0,-1.0, // triangle 1 : begin
+        -1.0,-1.0, 1.0,
+        -1.0, 1.0, 1.0, // triangle 1 : end
+        1.0, 1.0,-1.0, // triangle 2 : begin
+        -1.0,-1.0,-1.0,
+        -1.0, 1.0,-1.0, // triangle 2 : end
+        1.0,-1.0, 1.0,
+        -1.0,-1.0,-1.0,
+        1.0,-1.0,-1.0,
+        1.0, 1.0,-1.0,
+        1.0,-1.0,-1.0,
+        -1.0,-1.0,-1.0,
+        -1.0,-1.0,-1.0,
+        -1.0, 1.0, 1.0,
+        -1.0, 1.0,-1.0,
+        1.0,-1.0, 1.0,
+        -1.0,-1.0, 1.0,
+        -1.0,-1.0,-1.0,
+        -1.0, 1.0, 1.0,
+        -1.0,-1.0, 1.0,
+        1.0,-1.0, 1.0,
+        1.0, 1.0, 1.0,
+        1.0,-1.0,-1.0,
+        1.0, 1.0,-1.0,
+        1.0,-1.0,-1.0,
+        1.0, 1.0, 1.0,
+        1.0,-1.0, 1.0,
+        1.0, 1.0, 1.0,
+        1.0, 1.0,-1.0,
+        -1.0, 1.0,-1.0,
+        1.0, 1.0, 1.0,
+        -1.0, 1.0,-1.0,
+        -1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0,
+        -1.0, 1.0, 1.0,
+        1.0,-1.0, 1.0
     ], [], [], []);
+
     obj.VerticesColor = new Vector4(0.5, 0.5, 0.5, 1);
     obj.Position = new Vector3(0,0,-5);
     camera.lookAt(obj.Position, new Vector3(0, 1, 0));
     var objects = [obj];
-    drawScene();
-
-    function drawScene() {
-
+    drawScene(0);
+    function drawScene(deltaTime) {
+        let now = (deltaTime * 0.001) - lastTime;
+        lastTime = now;
+        obj.Rotation = new Vector3(0,Math.sin(now), 0);
         // Tell WebGL how to convert from clip space to pixels
         gl.viewport(0, 0, canvas.width, canvas.height);
 
         // Clear the canvas.
-        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        // Turn on culling. By default backfacing triangles
-        // // will be culled.
-        // gl.enable(gl.CULL_FACE);
-        //
-        // // Enable the depth buffer
-        // gl.enable(gl.DEPTH_TEST);
+        //Turn on culling. By default backfacing triangles
+        // will be culled.
+        gl.enable(gl.CULL_FACE);
 
+        // Enable the depth buffer
+        gl.enable(gl.DEPTH_TEST);
+        gl.depthFunc(gl.LESS);
         for (const obj of objects) {
             obj.render();
         }

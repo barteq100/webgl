@@ -52,9 +52,11 @@ export class BasicObject {
 
     recalculateModelMatrix(){
         const translation = Matrix4.getTranslation(this._position);
-        const rotation = Matrix4.getRotation(this._rotation);
+        const rotationX = Matrix4.getRotationX(this._rotation.x);
+        const rotationY = Matrix4.getRotationY(this._rotation.y);
+        const rotationZ = Matrix4.getRotationZ(this._rotation.z);
         const scale = Matrix4.getScaling(this._scale);
-        this.modelMatrix = new Matrix4().multiply(translation);
+        this.modelMatrix = new Matrix4().multiply(scale).multiply(rotationX).multiply(rotationY).multiply(rotationZ).multiply(translation);
             //Matrix4.multiplyMatrices(translation, rotation).multiply(scale);
     }
 
