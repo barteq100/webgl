@@ -63,9 +63,9 @@ function main() {
     var objects = [obj];
     drawScene(0);
     function drawScene(deltaTime) {
-        let now = (deltaTime * 0.001) - lastTime;
+        let now = lastTime + 1/60;
         lastTime = now;
-        obj.Rotation = new Vector3(0,Math.sin(now), 0);
+        obj.Rotation = new Vector3(0,now * 0.5, 0);
         // Tell WebGL how to convert from clip space to pixels
         gl.viewport(0, 0, canvas.width, canvas.height);
 

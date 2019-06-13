@@ -122,22 +122,23 @@ export class Matrix4 {
     }
 
     multiply(m: Matrix4): Matrix4 {
-        this.n11 = this.n11 * m.n11 + this.n12 * m.n21 + this.n13 * m.n31 + this.n14 * m.n41;
-        this.n12 = this.n11 * m.n12 + this.n12 * m.n22 + this.n13 * m.n32 + this.n14 * m.n42;
-        this.n13 = this.n11 * m.n13 + this.n12 * m.n23 + this.n13 * m.n33 + this.n14 * m.n43;
-        this.n14 = this.n11 * m.n14 + this.n12 * m.n24 + this.n13 * m.n34 + this.n14 * m.n44;
-        this.n21 = this.n21 * m.n11 + this.n22 * m.n21 + this.n23 * m.n31 + this.n24 * m.n41;
-        this.n22 = this.n21 * m.n12 + this.n22 * m.n22 + this.n23 * m.n32 + this.n24 * m.n42;
-        this.n23 = this.n21 * m.n13 + this.n22 * m.n23 + this.n23 * m.n33 + this.n24 * m.n43;
-        this.n24 = this.n21 * m.n14 + this.n22 * m.n24 + this.n23 * m.n34 + this.n24 * m.n44;
-        this.n31 = this.n31 * m.n11 + this.n32 * m.n21 + this.n33 * m.n31 + this.n34 * m.n41;
-        this.n32 = this.n31 * m.n12 + this.n32 * m.n22 + this.n33 * m.n32 + this.n34 * m.n42;
-        this.n33 = this.n31 * m.n13 + this.n32 * m.n23 + this.n33 * m.n33 + this.n34 * m.n43;
-        this.n34 = this.n31 * m.n14 + this.n32 * m.n24 + this.n33 * m.n34 + this.n34 * m.n44;
-        this.n41 = this.n41 * m.n11 + this.n42 * m.n21 + this.n43 * m.n31 + this.n44 * m.n41;
-        this.n42 = this.n41 * m.n12 + this.n42 * m.n22 + this.n43 * m.n32 + this.n44 * m.n42;
-        this.n43 = this.n41 * m.n13 + this.n42 * m.n23 + this.n43 * m.n33 + this.n44 * m.n43;
-        this.n44 = this.n41 * m.n14 + this.n42 * m.n24 + this.n43 * m.n34 + this.n44 * m.n44;
+        const multiplied = Matrix4.multiplyMatrices(this, m);
+        this.n11 = multiplied.n11;
+        this.n12 = multiplied.n12;
+        this.n13 = multiplied.n13;
+        this.n14 = multiplied.n14;
+        this.n21 = multiplied.n21;
+        this.n22 = multiplied.n22;
+        this.n23 = multiplied.n23;
+        this.n24 = multiplied.n24;
+        this.n31 = multiplied.n31;
+        this.n32 = multiplied.n32;
+        this.n33 = multiplied.n33;
+        this.n34 = multiplied.n34;
+        this.n41 = multiplied.n41;
+        this.n42 = multiplied.n42;
+        this.n43 = multiplied.n43;
+        this.n44 = multiplied.n44;
         return this;
     }
 
@@ -166,16 +167,16 @@ export class Matrix4 {
     }
 
     static getInverseMatrix4(m: Matrix4): Matrix4 {
-        var tmp_0  = m.n33 * m.n44;
-        var tmp_1  = m.n43 * m.n34;
-        var tmp_2  = m.n23 * m.n44;
-        var tmp_3  = m.n43 * m.n24;
-        var tmp_4  = m.n23 * m.n34;
-        var tmp_5  = m.n33 * m.n24;
-        var tmp_6  = m.n13 * m.n44;
-        var tmp_7  = m.n43 * m.n14;
-        var tmp_8  = m.n13 * m.n34;
-        var tmp_9  = m.n33 * m.n14;
+        var tmp_0 = m.n33 * m.n44;
+        var tmp_1 = m.n43 * m.n34;
+        var tmp_2 = m.n23 * m.n44;
+        var tmp_3 = m.n43 * m.n24;
+        var tmp_4 = m.n23 * m.n34;
+        var tmp_5 = m.n33 * m.n24;
+        var tmp_6 = m.n13 * m.n44;
+        var tmp_7 = m.n43 * m.n14;
+        var tmp_8 = m.n13 * m.n34;
+        var tmp_9 = m.n33 * m.n14;
         var tmp_10 = m.n13 * m.n24;
         var tmp_11 = m.n23 * m.n14;
         var tmp_12 = m.n31 * m.n42;
