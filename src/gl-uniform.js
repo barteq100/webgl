@@ -1,6 +1,7 @@
 export const UniformType = {
     VECTOR: 'VECTOR',
-    MATRIX4: 'MATRIX4'
+    MATRIX4: 'MATRIX4',
+    TEXTURE: 'TEXTURE'
 };
 
 export class GLUniform {
@@ -11,10 +12,14 @@ export class GLUniform {
     }
 
 
-    Enable(buffer: Float32List) {
+    Enable(buffer?: Float32List) {
         switch(this.type){
             case UniformType.MATRIX4:
                 this.gl.uniformMatrix4fv(this.location, false, buffer);
+                break;
+            case UniformType.TEXTURE:
+                this.gl.uniform1i(this.location, 0);
+                break;
         }
     }
 }

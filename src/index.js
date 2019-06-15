@@ -3,6 +3,9 @@ import {Vector4} from "./vector4";
 import {Mesh} from "./mesh";
 import {PerspectiveCamera} from "./perspective-camera";
 import {Vector3} from "./vector3";
+import {Material} from "./material";
+import {Texture} from "./texture";
+import {TextureMaterial} from "./texture-material";
 
 function main() {
     const canvas = document.getElementById("canvas");
@@ -18,6 +21,8 @@ function main() {
     const camera = new PerspectiveCamera(gl, 1.0471, canvas.width / canvas.height, 1/1000, 200);
     camera.Position = new Vector3(0, 5, 10);
     var obj = new Mesh(gl, camera);
+    var texture = Texture.createFromSrc(gl, 'textures/brick.jpg');
+    obj.material = new TextureMaterial(gl, texture);
     obj.Geometry = new Geometry(gl, [
         -1.0,-1.0,-1.0, // triangle 1 : begin
         -1.0,-1.0, 1.0,
@@ -55,7 +60,44 @@ function main() {
         1.0, 1.0, 1.0,
         -1.0, 1.0, 1.0,
         1.0,-1.0, 1.0
-    ], [], [], []);
+    ], [], [], [], [
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+    ]);
 
     obj.VerticesColor = new Vector4(0.5, 0.5, 0.5, 1);
     obj.Position = new Vector3(0,0,-5);

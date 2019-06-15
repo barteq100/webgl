@@ -1,15 +1,16 @@
 import {Vector3} from "./vector3";
 import {Matrix4} from "./matrix4";
-import {Material} from "./material";
 import {Vector4} from "./vector4";
+import {BasicMaterial} from "./basic-material.interface";
 
 export class BasicObject {
 
     constructor(gl: WebGLRenderingContext) {
         this.gl = gl;
-        this.material = new Material(gl);
+        this.material = new BasicMaterial(gl);
         this._position = new Vector3(0, 0 ,0);
         this._rotation = new Vector3(0, 0, 0);
+        this._color = new Vector4(0, 0, 0, 1);
         this._scale = new Vector3(1,1,1);
         this.modelMatrix = new Matrix4();
     }
@@ -42,9 +43,8 @@ export class BasicObject {
     }
 
     set Color(color: Vector4) {
-        this.material.color = color;
+        this._color = color;
     }
-
 
     get ModelMatrix() {
         return this.modelMatrix;

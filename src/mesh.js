@@ -3,6 +3,7 @@ import {Geometry} from "./geometry";
 import {Vector4} from "./vector4";
 import {PerspectiveCamera} from "./perspective-camera";
 import {Vector3} from "./vector3";
+import {MaterialType} from "./basic-material.interface";
 
 export class Mesh extends BasicObject {
     constructor(gl: WebGLRenderingContext, camera: PerspectiveCamera) {
@@ -35,8 +36,13 @@ export class Mesh extends BasicObject {
     render() {
         // const indentyCheck = new Matrix4().multiply(this.camera.modelMatrix).multiply(this.camera.ViewMatrix);
         // const p1 = new Vector4(0.5, 0.5, 0, 1).multiplyByMatrix(new Matrix4().multiply(this.modelMatrix).multiply(this.camera.ViewMatrix).multiply(this.camera.ProjectionMatrix));
-        this.material.render(this.geometry.positionsBuffer, this.geometry.colorsBuffer,
-            this.modelMatrix.toFloat32List(), this.camera.ViewMatrix.toFloat32List(), this.camera.ProjectionMatrix.toFloat32List());
+        if(this.material.materialType === MaterialType.BASIC){
+            this.material.render(this.geometry.positionsBuffer, this.geometry.colorsBuffer,
+                this.modelMatrix.toFloat32List(), this.camera.ViewMatrix.toFloat32List(), this.camera.ProjectionMatrix.toFloat32List());
+        } else if (this.material.materialType === MaterialType.TEXTURE) {
+            this.material.render(this.geometry.positionsBuffer, this.geometry.uvsBuffer,
+                this.modelMatrix.toFloat32List(), this.camera.ViewMatrix.toFloat32List(), this.camera.ProjectionMatrix.toFloat32List());
+        }
         var primitiveType = this.gl.TRIANGLES;
         var offset = 0;
         var count = this.geometry.positions.length / 3;

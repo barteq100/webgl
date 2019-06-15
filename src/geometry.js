@@ -1,13 +1,13 @@
 import {Vector4} from "./vector4";
 
 export class Geometry {
-    constructor(gl: WebGLRenderingContext, positions = [], indices = [], normals = [], colors = []) {
+    constructor(gl: WebGLRenderingContext, positions = [], indices = [], normals = [], colors = [], uvs = []) {
         this.gl = gl;
         this.positions = new Float32Array(positions);
         this.indices = new Float32Array(indices);
         this.normals = new Float32Array(normals);
         this._colors = new Float32Array(colors);
-
+        this._uvs = new Float32Array(uvs);
         this._positionsBuffer = gl.createBuffer();
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._positionsBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this.positions, this.gl.STATIC_DRAW);
@@ -20,6 +20,9 @@ export class Geometry {
         this._colorsBuffer = gl.createBuffer();
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._colorsBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this._colors, this.gl.STATIC_DRAW);
+        this._uvsBuffer = gl.createBuffer();
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._uvsBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this._uvs, this.gl.STATIC_DRAW);
     }
 
     get colors() {
@@ -51,6 +54,12 @@ export class Geometry {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._colorsBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this._colors, this.gl.STATIC_DRAW);
         return this._colorsBuffer;
+    }
+
+    get uvsBuffer(): WebGLBuffer {
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._uvsBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this._uvs, this.gl.STATIC_DRAW);
+        return this._uvsBuffer;
     }
 
 
