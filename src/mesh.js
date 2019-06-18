@@ -11,6 +11,8 @@ export class Mesh extends BasicObject {
         this.camera = camera;
         this.gl = gl;
         this.geometry = new Geometry(gl);
+        this.primitiveType = this.gl.TRIANGLES;
+        this.drawCount = this.geometry.positions.length / 3;
     }
 
     get Geometry(){
@@ -19,6 +21,7 @@ export class Mesh extends BasicObject {
 
     set Geometry(newGeometry: Geometry){
         this.geometry = newGeometry;
+        this.drawCount = this.geometry.positions.length / 3;
     }
 
     set VerticesColor(color: Vector4) {
@@ -36,16 +39,6 @@ export class Mesh extends BasicObject {
     render() {
         // const indentyCheck = new Matrix4().multiply(this.camera.modelMatrix).multiply(this.camera.ViewMatrix);
         // const p1 = new Vector4(0.5, 0.5, 0, 1).multiplyByMatrix(new Matrix4().multiply(this.modelMatrix).multiply(this.camera.ViewMatrix).multiply(this.camera.ProjectionMatrix));
-        if(this.material.materialType === MaterialType.BASIC){
-            this.material.render(this.geometry.positionsBuffer, this.geometry.colorsBuffer,
-                this.modelMatrix.toFloat32List(), this.camera.ViewMatrix.toFloat32List(), this.camera.ProjectionMatrix.toFloat32List());
-        } else if (this.material.materialType === MaterialType.TEXTURE) {
-            this.material.render(this.geometry.positionsBuffer, this.geometry.uvsBuffer,
-                this.modelMatrix.toFloat32List(), this.camera.ViewMatrix.toFloat32List(), this.camera.ProjectionMatrix.toFloat32List());
-        }
-        var primitiveType = this.gl.TRIANGLES;
-        var offset = 0;
-        var count = this.geometry.positions.length / 3;
-        this.gl.drawArrays(primitiveType, offset, count);
+        this.material.render(this, this.camera);
     }
 }

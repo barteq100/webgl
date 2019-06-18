@@ -1,18 +1,27 @@
 import {Program} from "./program";
+import {Mesh} from "./mesh";
+import {PerspectiveCamera} from "./perspective-camera";
+
 export const MaterialType = {
     DEFAULT: 'DEFAULT',
     BASIC: 'BASIC',
     TEXTURE: 'TEXTURE'
 };
+
 export class BasicMaterial {
     vertexShaderScript: string;
     fragmentShaderScript: string;
     program: Program;
-    materialType: MaterialType;
     gl: WebGLRenderingContext;
-    constructor(gl){
+
+    constructor(gl) {
         this.gl = gl;
     }
-    render() {
+
+    render(mesh: Mesh, camera: PerspectiveCamera) {
+    }
+
+    renderArray(meshes: Mesh[], camera: PerspectiveCamera) {
+
     }
 }

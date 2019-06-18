@@ -3,12 +3,13 @@ import {GLAttribute} from "./gl-attribute";
 import {Vector4} from "./vector4";
 import {GLUniform, UniformType} from "./gl-uniform";
 import {BasicMaterial, MaterialType} from "./basic-material.interface";
+import {Mesh} from "./mesh";
+import {PerspectiveCamera} from "./perspective-camera";
 
 export class Material extends BasicMaterial{
 
     constructor(gl: WebGLRenderingContext): BasicMaterial  {
         super(gl);
-        this.materialType = MaterialType.BASIC;
         this._color = new Vector4(0, 0 ,0 , 1);
         this.gl = gl;
         this.vertexShaderScript =
@@ -42,12 +43,25 @@ export class Material extends BasicMaterial{
         this._color = color;
     }
 
-    render(positions: WebGLBuffer, colors: WebGLBuffer, model: Float32List, view: Float32List, projection: Float32List) {
+    render(mesh: Mesh, camera: PerspectiveCamera) {
         this.gl.useProgram(this.program.program);
-        this.positionAttribute.Enable(positions);
-        this.colorAttribute.Enable(colors);
-        this.model.Enable(model);
-        this.view.Enable(view);
-        this.projection.Enable(projection);
+        this.positionAttribute.Enable(mesh.Geometry.positionsBuffer);
+        this.colorAttribute.Enable(mesh.geometry.colorsBuffer);
+        this.model.Enable(mesh.modelMatrix.toFloat32List());
+        this.view.Enable(camera.ViewMatrix.toFloat32List());
+        this.projection.Enable(camera.ProjectionMatrix.toFloat32List());
+        this.gl.drawArrays(mesh.primitiveType, 0, mesh.drawCount);
+    }
+
+    renderArray(meshes: Mesh[], camera: PerspectiveCamera) {
+        this.gl.useProgram(this.program.program);
+        this.view.Enable(camera.ViewMatrix.toFloat32List());
+        this.projection.Enable(camera.ProjectionMatrix.toFloat32List());
+        for(const mesh of meshes) {
+            this.positionAttribute.Enable(mesh.Geometry.positionsBuffer);
+            this.colorAttribute.Enable(mesh.geometry.colorsBuffer);
+            this.model.Enable(mesh.modelMatrix.toFloat32List());
+            this.gl.drawArrays(mesh.primitiveType, 0, mesh.drawCount);
+        }
     }
 }

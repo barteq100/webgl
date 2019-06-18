@@ -3,13 +3,14 @@ import {Program} from "./program";
 import {GLUniform, UniformType} from "./gl-uniform";
 import {GLAttribute} from "./gl-attribute";
 import {BasicMaterial, MaterialType} from "./basic-material.interface";
+import {PerspectiveCamera} from "./perspective-camera";
+import {Mesh} from "./mesh";
 
 export class TextureMaterial extends BasicMaterial{
 
     constructor(gl: WebGLRenderingContext, texture: Texture){
         super(gl);
         this.texture = texture;
-        this.materialType = MaterialType.TEXTURE;
         this.vertexShaderScript =
             '\r\n' +
             'precision highp float;\r\n' +
@@ -41,13 +42,14 @@ export class TextureMaterial extends BasicMaterial{
         this.uvAttribute = new GLAttribute(gl, this.program.program, 'a_uv', 2);
     }
 
-    render(positions: WebGLBuffer, uvs: WebGLBuffer, model: Float32List, view: Float32List, projection: Float32List) {
+    render(mesh: Mesh, camera: PerspectiveCamera) {
         this.gl.useProgram(this.program.program);
-        this.positionAttribute.Enable(positions);
-        this.uvAttribute.Enable(uvs);
-        this.model.Enable(model);
-        this.view.Enable(view);
-        this.projection.Enable(projection);
+        this.positionAttribute.Enable(mesh.Geometry.positionsBuffer);
+        this.model.Enable(mesh.modelMatrix.toFloat32List());
+        this.view.Enable(camera.ViewMatrix.toFloat32List());
+        this.projection.Enable(camera.ProjectionMatrix.toFloat32List());
+        this.uvAttribute.Enable(mesh.geometry.uvsBuffer);
         this.textureUniform.Enable();
+        this.gl.drawArrays(mesh.primitiveType, 0, mesh.drawCount);
     }
 }
