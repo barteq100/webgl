@@ -3,9 +3,9 @@ import {Vector4} from "./vector4";
 import {Mesh} from "./mesh";
 import {PerspectiveCamera} from "./perspective-camera";
 import {Vector3} from "./vector3";
-import {Material} from "./material";
 import {Texture} from "./texture";
 import {TextureMaterial} from "./texture-material";
+import {Quaternion} from "./quaternion";
 
 function main() {
     const canvas = document.getElementById("canvas");
@@ -103,11 +103,13 @@ function main() {
     obj.Position = new Vector3(0,0,-5);
     camera.lookAt(obj.Position, new Vector3(0, 1, 0));
     var objects = [obj];
+    var quat = new Quaternion(1, 0, 0, 0);
     drawScene(0);
     function drawScene(deltaTime) {
         let now = lastTime + 1/60;
         lastTime = now;
-        obj.Rotation = new Vector3(0,now * 0.5, 0);
+        quat.setRotation(now);
+        obj.Rotation = quat.getEulerRotation();
         // Tell WebGL how to convert from clip space to pixels
         gl.viewport(0, 0, canvas.width, canvas.height);
 
