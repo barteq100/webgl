@@ -23,6 +23,7 @@ export class TextureMaterial extends BasicMaterial{
             'void main(void) {\r\n' +
             '    v_texCoord = a_uv;\r\n' +
             '    gl_Position = u_projection * u_view *  u_model * vec4(a_position, 1.0);\r\n' +
+            '    gl_Position /= gl_Position.w ;\r\n' +
             '}\r\n';
 
         this.fragmentShaderScript = '\r\n' +

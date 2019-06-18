@@ -3,7 +3,6 @@ import {Geometry} from "./geometry";
 import {Vector4} from "./vector4";
 import {PerspectiveCamera} from "./perspective-camera";
 import {Vector3} from "./vector3";
-import {MaterialType} from "./basic-material.interface";
 
 export class Mesh extends BasicObject {
     constructor(gl: WebGLRenderingContext, camera: PerspectiveCamera) {

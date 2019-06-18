@@ -15,6 +15,7 @@ export class Texture {
         image.src = url;
         image.addEventListener('load', function() {
             // Now that the image has loaded make copy it to the texture.
+            gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, texture.texture);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
 
@@ -31,6 +32,11 @@ export class Texture {
             }
         });
         return texture;
+    }
+
+    activate(unit: number = 0) {
+        this.gl.activeTexture(this.gl.TEXTURE0 + unit);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
     }
 
 }

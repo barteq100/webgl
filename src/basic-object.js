@@ -1,13 +1,12 @@
 import {Vector3} from "./vector3";
 import {Matrix4} from "./matrix4";
 import {Vector4} from "./vector4";
-import {BasicMaterial} from "./basic-material.interface";
 
 export class BasicObject {
 
     constructor(gl: WebGLRenderingContext) {
         this.gl = gl;
-        this.material = new BasicMaterial(gl);
+        this.material = null;
         this._position = new Vector3(0, 0 ,0);
         this._rotation = new Vector3(0, 0, 0);
         this._color = new Vector4(0, 0, 0, 1);
