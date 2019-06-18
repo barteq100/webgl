@@ -1,4 +1,5 @@
 import {Vector3} from "./vector3";
+import {Quaternion} from "./quaternion";
 
 //ROW MAJOR
 export class Matrix4 {
@@ -119,6 +120,39 @@ export class Matrix4 {
         multiplied.n43 = m1.n41 * m2.n13 + m1.n42 * m2.n23 + m1.n43 * m2.n33 + m1.n44 * m2.n43;
         multiplied.n44 = m1.n41 * m2.n14 + m1.n42 * m2.n24 + m1.n43 * m2.n34 + m1.n44 * m2.n44;
         return multiplied;
+    }
+
+    static fromQuaternion(quaternion: Quaternion, position?: Vector3): Matrix4 {
+        var x = quaternion.x, y = quaternion.y, z = quaternion.z, w = quaternion.w;
+        var x2 = x + x,	y2 = y + y, z2 = z + z;
+        var xx = x * x2, xy = x * y2, xz = x * z2;
+        var yy = y * y2, yz = y * z2, zz = z * z2;
+        var wx = w * x2, wy = w * y2, wz = w * z2;
+        if(!position){
+            position = new Vector3(0,0, 0);
+        }
+        const te = new Matrix4();
+        te.n11 = ( 1 - ( yy + zz ) );
+        te.n12 = ( xy + wz );
+        te.n13 = ( xz - wy );
+        te.n14 = 0;
+
+        te.n21 = ( xy - wz );
+        te.n22 = ( 1 - ( xx + zz ) );
+        te.n23 = ( yz + wx );
+        te.n24 = 0;
+
+        te.n31 = ( xz + wy );
+        te.n32 = ( yz - wx );
+        te.n33 = ( 1 - ( xx + yy ) );
+        te.n34 = 0;
+
+        te.n41 = position.x;
+        te.n42 = position.y;
+        te.n43 = position.z;
+        te.n44 = 1;
+
+        return te;
     }
 
     multiply(m: Matrix4): Matrix4 {
