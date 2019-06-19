@@ -67,7 +67,7 @@ export class Quaternion {
         return this;
     }
 
-    getEulerRotation(): Vector3 {
+    getEulerRotationAxis(): Vector3 {
         var theta = Math.acos(this.w) * 2;
         var sin = Math.sin(theta / 2);
         return new Vector3(this.x / sin,
