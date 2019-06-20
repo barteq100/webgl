@@ -1,5 +1,5 @@
 export class Vector3 {
-    constructor(x: number, y: number, z: number) {
+    constructor(public x: number,public y: number,public z: number) {
         this.x = x;
         this.y = y;
         this.z = z;

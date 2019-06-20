@@ -1,7 +1,18 @@
 import {Vector4} from "./vector4";
 
 export class Geometry {
-    constructor(gl: WebGLRenderingContext, positions = [], indices = [], normals = [], colors = [], uvs = []) {
+    public positions: Float32Array;
+    private indices: Float32Array;
+    private gl: WebGLRenderingContext;
+    private normals: Float32Array;
+    private _colors: Float32Array;
+    private _uvs: Float32Array;
+    private _positionsBuffer: WebGLBuffer;
+    private _indicesBuffer: WebGLBuffer;
+    private _normalsBuffer: WebGLBuffer;
+    private _colorsBuffer: WebGLBuffer;
+    private _uvsBuffer: WebGLBuffer;
+    constructor(gl: WebGLRenderingContext, positions: number[] = [], indices: number[] = [], normals: number[] = [], colors: number[] = [], uvs: number[] = []) {
         this.gl = gl;
         this.positions = new Float32Array(positions);
         this.indices = new Float32Array(indices);
@@ -25,12 +36,12 @@ export class Geometry {
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this._uvs, this.gl.STATIC_DRAW);
     }
 
-    get colors() {
+    public get colors(): Float32Array {
         return this._colors;
     }
 
-    set color(color: Vector4) {
-        const newColors = [];
+    public set color(color: Vector4) {
+        const newColors: number[] = [];
         for (let i = 0; i < this.positions.length; i++) {
             newColors.push(color.x, color.y, color.z, color.w);
         }
@@ -39,24 +50,24 @@ export class Geometry {
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this._colors, this.gl.STATIC_DRAW);
     }
 
-    set colors(colors: Vector4[]) {
-        this._colors = new Float32Array(colors);
+    public set colors(colors: Float32Array) {
+        this._colors = colors;
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._colorsBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this._colors, this.gl.STATIC_DRAW);
     }
 
-    get positionsBuffer(): WebGLBuffer {
+    public get positionsBuffer(): WebGLBuffer {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._positionsBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this.positions, this.gl.STATIC_DRAW);
         return this._positionsBuffer;
     }
-    get colorsBuffer(): WebGLBuffer {
+    public get colorsBuffer(): WebGLBuffer {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._colorsBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this._colors, this.gl.STATIC_DRAW);
         return this._colorsBuffer;
     }
 
-    get uvsBuffer(): WebGLBuffer {
+    public get uvsBuffer(): WebGLBuffer {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._uvsBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this._uvs, this.gl.STATIC_DRAW);
         return this._uvsBuffer;

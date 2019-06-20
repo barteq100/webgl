@@ -3,6 +3,23 @@ import {Quaternion} from "./quaternion";
 
 //ROW MAJOR
 export class Matrix4 {
+    public n11: number;
+    public n12: number;
+    public n13: number;
+    public n14: number;
+    public n21: number;
+    public n22: number;
+    public n23: number;
+    public n24: number;
+    public n31: number;
+    public n32: number;
+    public n33: number;
+    public n34: number;
+    public n41: number;
+    public n42: number;
+    public n43: number;
+    public n44: number;
+
     constructor() {
         this.n11 = 1;
         this.n12 = 0;
@@ -22,11 +39,11 @@ export class Matrix4 {
         this.n44 = 1;
     }
 
-    static getIdentity(): Matrix4 {
+    public static getIdentity(): Matrix4 {
         return new Matrix4();
     }
 
-    static getScaling(scale: Vector3): Matrix4 {
+    public static getScaling(scale: Vector3): Matrix4 {
         const scalingMatrix = new Matrix4();
         scalingMatrix.n11 = scale.x;
         scalingMatrix.n22 = scale.y;
@@ -34,7 +51,7 @@ export class Matrix4 {
         return scalingMatrix;
     }
 
-    static getTranslation(vector: Vector3): Matrix4 {
+    public static getTranslation(vector: Vector3): Matrix4 {
         const translationMatrix = new Matrix4();
         translationMatrix.n41 = vector.x;
         translationMatrix.n42 = vector.y;
@@ -42,12 +59,12 @@ export class Matrix4 {
         return translationMatrix;
     }
 
-    translate(vector: Vector3): Matrix4 {
+    public translate(vector: Vector3): Matrix4 {
         const m = Matrix4.getTranslation(vector);
         return this.multiply(m);
     }
 
-    static getRotationX(radians: number): Matrix4 {
+    public static getRotationX(radians: number): Matrix4 {
         const rotationMatrix = new Matrix4();
         const cos = Math.cos(radians);
         const sin = Math.sin(radians);
@@ -58,7 +75,7 @@ export class Matrix4 {
         return rotationMatrix;
     }
 
-    static getRotationY(radians: number): Matrix4 {
+    public static getRotationY(radians: number): Matrix4 {
         const rotationMatrix = new Matrix4();
         const cos = Math.cos(radians);
         const sin = Math.sin(radians);
@@ -69,7 +86,7 @@ export class Matrix4 {
         return rotationMatrix;
     }
 
-    static getRotationZ(radians: number): Matrix4 {
+    public static getRotationZ(radians: number): Matrix4 {
         const rotationMatrix = new Matrix4();
         const cos = Math.cos(radians);
         const sin = Math.sin(radians);
@@ -80,7 +97,7 @@ export class Matrix4 {
         return rotationMatrix;
     }
 
-    static getRotation(vector: Vector3): Matrix4 {
+    public static getRotation(vector: Vector3): Matrix4 {
         const rotationMatrix = new Matrix4();
         const cosX = Math.cos(vector.x);
         const sinX = Math.sin(vector.x);
@@ -101,7 +118,7 @@ export class Matrix4 {
     }
 
     //ROW MAJOR
-    static multiplyMatrices(m1: Matrix4, m2: Matrix4) {
+    public static multiplyMatrices(m1: Matrix4, m2: Matrix4) {
         const multiplied = new Matrix4();
         multiplied.n11 = m1.n11 * m2.n11 + m1.n12 * m2.n21 + m1.n13 * m2.n31 + m1.n14 * m2.n41;
         multiplied.n12 = m1.n11 * m2.n12 + m1.n12 * m2.n22 + m1.n13 * m2.n32 + m1.n14 * m2.n42;
@@ -122,29 +139,29 @@ export class Matrix4 {
         return multiplied;
     }
 
-    static fromQuaternion(quaternion: Quaternion, position?: Vector3): Matrix4 {
+    public static fromQuaternion(quaternion: Quaternion, position?: Vector3): Matrix4 {
         var x = quaternion.x, y = quaternion.y, z = quaternion.z, w = quaternion.w;
-        var x2 = x + x,	y2 = y + y, z2 = z + z;
+        var x2 = x + x, y2 = y + y, z2 = z + z;
         var xx = x * x2, xy = x * y2, xz = x * z2;
         var yy = y * y2, yz = y * z2, zz = z * z2;
         var wx = w * x2, wy = w * y2, wz = w * z2;
-        if(!position){
-            position = new Vector3(0,0, 0);
+        if (!position) {
+            position = new Vector3(0, 0, 0);
         }
         const te = new Matrix4();
-        te.n11 = ( 1 - ( yy + zz ) );
-        te.n12 = ( xy + wz );
-        te.n13 = ( xz - wy );
+        te.n11 = (1 - (yy + zz));
+        te.n12 = (xy + wz);
+        te.n13 = (xz - wy);
         te.n14 = 0;
 
-        te.n21 = ( xy - wz );
-        te.n22 = ( 1 - ( xx + zz ) );
-        te.n23 = ( yz + wx );
+        te.n21 = (xy - wz);
+        te.n22 = (1 - (xx + zz));
+        te.n23 = (yz + wx);
         te.n24 = 0;
 
-        te.n31 = ( xz + wy );
-        te.n32 = ( yz - wx );
-        te.n33 = ( 1 - ( xx + yy ) );
+        te.n31 = (xz + wy);
+        te.n32 = (yz - wx);
+        te.n33 = (1 - (xx + yy));
         te.n34 = 0;
 
         te.n41 = position.x;
@@ -155,7 +172,7 @@ export class Matrix4 {
         return te;
     }
 
-    multiply(m: Matrix4): Matrix4 {
+    public multiply(m: Matrix4): Matrix4 {
         const multiplied = Matrix4.multiplyMatrices(this, m);
         this.n11 = multiplied.n11;
         this.n12 = multiplied.n12;
@@ -176,7 +193,7 @@ export class Matrix4 {
         return this;
     }
 
-    static perspective(fov, aspect, near, far) {
+    public static perspective(fov: number, aspect: number, near: number, far: number) {
         const f = Math.tan(Math.PI * 0.5 - 0.5 * fov);
         const rangeInv = 1.0 / (near - far);
 
@@ -200,7 +217,7 @@ export class Matrix4 {
         return matrix;
     }
 
-    static getInverseMatrix4(m: Matrix4): Matrix4 {
+    public static getInverseMatrix4(m: Matrix4): Matrix4 {
         var tmp_0 = m.n33 * m.n44;
         var tmp_1 = m.n43 * m.n34;
         var tmp_2 = m.n23 * m.n44;
@@ -269,11 +286,11 @@ export class Matrix4 {
         return dst;
     }
 
-    toFloat32List(): Float32List {
+    public toFloat32List(): Float32List {
         return [this.n11, this.n12, this.n13, this.n14, this.n21, this.n22, this.n23, this.n24, this.n31, this.n32, this.n33, this.n34, this.n41, this.n42, this.n43, this.n44];
     }
 
-    toTransposedFloat32List(): Float32List {
+    public toTransposedFloat32List(): Float32List {
         return [
             this.n11, this.n21, this.n31, this.n41,
             this.n12, this.n22, this.n32, this.n42,

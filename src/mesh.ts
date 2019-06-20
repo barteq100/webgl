@@ -2,37 +2,33 @@ import {BasicObject} from "./basic-object";
 import {Geometry} from "./geometry";
 import {Vector4} from "./vector4";
 import {PerspectiveCamera} from "./perspective-camera";
-import {Vector3} from "./vector3";
+import {BasicMaterial} from "./basic-material.interface";
 
 export class Mesh extends BasicObject {
-    constructor(gl: WebGLRenderingContext, camera: PerspectiveCamera) {
+    private _geometry: Geometry;
+    public primitiveType: GLenum;
+    public drawCount: number;
+    public material: BasicMaterial;
+
+    constructor(gl: WebGLRenderingContext, private camera: PerspectiveCamera) {
         super(gl);
         this.camera = camera;
-        this.gl = gl;
-        this.geometry = new Geometry(gl);
+        this._geometry = new Geometry(gl);
         this.primitiveType = this.gl.TRIANGLES;
-        this.drawCount = this.geometry.positions.length / 3;
+        this.drawCount = this._geometry.positions.length / 3;
     }
 
-    get Geometry(){
-        return this.geometry;
+    public get Geometry(){
+        return this._geometry;
     }
 
-    set Geometry(newGeometry: Geometry){
-        this.geometry = newGeometry;
-        this.drawCount = this.geometry.positions.length / 3;
+    public set Geometry(newGeometry: Geometry){
+        this._geometry = newGeometry;
+        this.drawCount = this._geometry.positions.length / 3;
     }
 
-    set VerticesColor(color: Vector4) {
-        this.geometry.color = color;
-    }
-
-    get Position() {
-        return this._position;
-    }
-
-    set Position(newPosition: Vector3) {
-        super.Position = newPosition;
+    public set VerticesColor(color: Vector4) {
+        this._geometry.color = color;
     }
 
     render() {

@@ -1,10 +1,10 @@
 import {Vector3} from "./vector3";
 
 export class Quaternion {
-    x: number;
-    y: number;
-    z: number;
-    w: number;
+    public x: number;
+    public y: number;
+    public z: number;
+    public w: number;
 
     constructor(x: number, y: number, z: number, w: number) {
         this.x = x;
@@ -58,7 +58,7 @@ export class Quaternion {
         );
     }
 
-    multiply(q: Quaternion){
+    multiply(q: Quaternion) {
         const newQuat = Quaternion.MultiplyQuaternions(this, q);
         this.x = newQuat.x;
         this.y = newQuat.y;
@@ -105,10 +105,10 @@ export class Quaternion {
 
             l = 1 / l;
 
-            this.x = this.x * l;
-            this.y = this.y * l;
-            this.z = this.z * l;
-            this.w = this.w * l;
+            this.x *= l;
+            this.y *= l;
+            this.z *= l;
+            this.w *= l;
 
         }
         return this;

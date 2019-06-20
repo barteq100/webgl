@@ -1,6 +1,8 @@
 import {isPowerOf2} from "./math.utils";
 
 export class Texture {
+    public texture: WebGLTexture;
+    private gl: WebGLRenderingContext;
     constructor(gl: WebGLRenderingContext) {
        this.gl = gl;
        this.texture = gl.createTexture();
@@ -9,7 +11,7 @@ export class Texture {
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
             new Uint8Array([0, 0, 255, 255]));
     }
-    static createFromSrc(gl: WebGLRenderingContext, url: string): Texture {
+    public static createFromSrc(gl: WebGLRenderingContext, url: string): Texture {
         var texture = new Texture(gl);
         var image = new Image();
         image.src = url;
@@ -34,7 +36,7 @@ export class Texture {
         return texture;
     }
 
-    activate(unit: number = 0) {
+    public activate(unit: number = 0) {
         this.gl.activeTexture(this.gl.TEXTURE0 + unit);
         this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
     }

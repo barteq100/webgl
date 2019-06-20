@@ -7,6 +7,13 @@ import {PerspectiveCamera} from "./perspective-camera";
 import {Mesh} from "./mesh";
 
 export class TextureMaterial extends BasicMaterial{
+    private texture: Texture;
+    private model: GLUniform;
+    private view: GLUniform;
+    private textureUniform: GLUniform;
+    private projection: GLUniform;
+    private positionAttribute: GLAttribute;
+    private uvAttribute: GLAttribute;
 
     constructor(gl: WebGLRenderingContext, texture: Texture){
         super(gl);
@@ -46,10 +53,10 @@ export class TextureMaterial extends BasicMaterial{
     render(mesh: Mesh, camera: PerspectiveCamera) {
         this.gl.useProgram(this.program.program);
         this.positionAttribute.Enable(mesh.Geometry.positionsBuffer);
-        this.model.Enable(mesh.modelMatrix.toFloat32List());
+        this.model.Enable(mesh.ModelMatrix.toFloat32List());
         this.view.Enable(camera.ViewMatrix.toFloat32List());
         this.projection.Enable(camera.ProjectionMatrix.toFloat32List());
-        this.uvAttribute.Enable(mesh.geometry.uvsBuffer);
+        this.uvAttribute.Enable(mesh.Geometry.uvsBuffer);
         this.textureUniform.Enable();
         this.gl.drawArrays(mesh.primitiveType, 0, mesh.drawCount);
     }

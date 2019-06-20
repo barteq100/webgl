@@ -1,5 +1,10 @@
+import {Program} from "./program";
+
 export class GLAttribute{
-    constructor(gl: WebGLRenderingContext, program, name, numberOfComponents) {
+    private numOfComp: number;
+    private location: GLint;
+
+    constructor(private gl: WebGLRenderingContext, program: WebGLProgram, name: string, numberOfComponents: number) {
         this.gl = gl;
         this.numOfComp = numberOfComponents;
         this.location = gl.getAttribLocation(program, name);

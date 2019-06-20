@@ -1,11 +1,16 @@
-export const UniformType = {
-    VECTOR: 'VECTOR',
-    MATRIX4: 'MATRIX4',
-    TEXTURE: 'TEXTURE'
-};
+import {Program} from "./program";
+
+export enum UniformType {
+    VECTOR  = 'VECTOR',
+    MATRIX4 = 'MATRIX4',
+    TEXTURE = 'TEXTURE'
+}
 
 export class GLUniform {
-    constructor(gl: WebGLRenderingContext, program, name, type: UniformType) {
+    private gl: WebGLRenderingContext;
+    private type: UniformType;
+    private location: WebGLUniformLocation;
+    constructor(gl: WebGLRenderingContext, program: WebGLProgram, name: string, type: UniformType) {
         this.gl = gl;
         this.location = gl.getUniformLocation(program, name);
         this.type = type;

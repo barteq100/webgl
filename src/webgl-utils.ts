@@ -1,4 +1,4 @@
-export function compileShader(gl, shaderSource, shaderType) {
+export function compileShader(gl: WebGLRenderingContext, shaderSource: string, shaderType: GLenum) {
     // Create the shader object
     var shader = gl.createShader(shaderType);
 
@@ -18,7 +18,7 @@ export function compileShader(gl, shaderSource, shaderType) {
     return shader;
 }
 
-export function createProgram(gl, vertexShader, fragmentShader) {
+export function createProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader , fragmentShader: WebGLShader) {
     // create a program.
     var program = gl.createProgram();
 

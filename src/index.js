@@ -6,6 +6,7 @@ import {Vector3} from "./vector3";
 import {Texture} from "./texture";
 import {TextureMaterial} from "./texture-material";
 import {Quaternion} from "./quaternion";
+import {BasicObject} from "./basic-object";
 
 function main() {
     const canvas = document.getElementById("canvas");
@@ -21,7 +22,7 @@ function main() {
     const camera = new PerspectiveCamera(gl, 1.0471, canvas.width / canvas.height, 1/1000, 200);
     camera.Position = new Vector3(0, 5, 10);
     var obj = new Mesh(gl, camera);
-    var texture = Texture.createFromSrc(gl, 'textures/brick.jpg');
+    var texture = Texture.createFromSrc(gl, 'textures/stars.jpg');
     obj.material = new TextureMaterial(gl, texture);
     obj.Geometry = new Geometry(gl, [
         -1.0,-1.0,-1.0, // triangle 1 : begin
@@ -98,18 +99,21 @@ function main() {
         1.0, 0.0,
         1.0, 1.0,
     ]);
-
+    const parent = new BasicObject(gl);
+    parent.Position = new Vector3(0, 0, -5);
     obj.VerticesColor = new Vector4(0.5, 0.5, 0.5, 1);
-    obj.Position = new Vector3(0,0,-5);
-    camera.lookAt(obj.Position, new Vector3(0, 1, 0));
+    obj.Position = new Vector3(5,0,0);
+    obj.Parent = parent;
+    camera.lookAt(parent.Position, new Vector3(0, 1, 0));
     var objects = [obj];
     var quat = new Quaternion(1, 0, 0, 0);
     drawScene(0);
     function drawScene(deltaTime) {
         let now = lastTime + 1/60;
         lastTime = now;
-        quat.setRotation(now);
-        obj.Rotation = quat.getEulerRotation();
+        quat.setRotation(Math.sin(now));
+        parent.Rotation = new Vector3(0 , 0, now * 1.5);
+        obj.Rotation = new Vector3(now * 1.5, 0 , 0);
         // Tell WebGL how to convert from clip space to pixels
         gl.viewport(0, 0, canvas.width, canvas.height);
 

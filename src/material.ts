@@ -7,8 +7,14 @@ import {Mesh} from "./mesh";
 import {PerspectiveCamera} from "./perspective-camera";
 
 export class Material extends BasicMaterial{
+    private _color: Vector4;
+    private model: GLUniform;
+    private view: GLUniform;
+    private projection: GLUniform;
+    private positionAttribute: GLAttribute;
+    private colorAttribute: GLAttribute;
 
-    constructor(gl: WebGLRenderingContext): BasicMaterial  {
+    constructor(gl: WebGLRenderingContext)  {
         super(gl);
         this._color = new Vector4(0, 0 ,0 , 1);
         this.gl = gl;
@@ -46,8 +52,8 @@ export class Material extends BasicMaterial{
     render(mesh: Mesh, camera: PerspectiveCamera) {
         this.gl.useProgram(this.program.program);
         this.positionAttribute.Enable(mesh.Geometry.positionsBuffer);
-        this.colorAttribute.Enable(mesh.geometry.colorsBuffer);
-        this.model.Enable(mesh.modelMatrix.toFloat32List());
+        this.colorAttribute.Enable(mesh.Geometry.colorsBuffer);
+        this.model.Enable(mesh.ModelMatrix.toFloat32List());
         this.view.Enable(camera.ViewMatrix.toFloat32List());
         this.projection.Enable(camera.ProjectionMatrix.toFloat32List());
         this.gl.drawArrays(mesh.primitiveType, 0, mesh.drawCount);
@@ -59,8 +65,8 @@ export class Material extends BasicMaterial{
         this.projection.Enable(camera.ProjectionMatrix.toFloat32List());
         for(const mesh of meshes) {
             this.positionAttribute.Enable(mesh.Geometry.positionsBuffer);
-            this.colorAttribute.Enable(mesh.geometry.colorsBuffer);
-            this.model.Enable(mesh.modelMatrix.toFloat32List());
+            this.colorAttribute.Enable(mesh.Geometry.colorsBuffer);
+            this.model.Enable(mesh.ModelMatrix.toFloat32List());
             this.gl.drawArrays(mesh.primitiveType, 0, mesh.drawCount);
         }
     }
