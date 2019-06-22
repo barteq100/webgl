@@ -9,13 +9,21 @@ export class Mesh extends BasicObject {
     public primitiveType: GLenum;
     public drawCount: number;
     public material: BasicMaterial;
+    private _instances: BasicObject[] = [];
 
-    constructor(gl: WebGLRenderingContext, private camera: PerspectiveCamera) {
+    constructor(gl: WebGL2RenderingContext, private camera: PerspectiveCamera) {
         super(gl);
         this.camera = camera;
         this._geometry = new Geometry(gl);
         this.primitiveType = this.gl.TRIANGLES;
         this.drawCount = this._geometry.positions.length / 3;
+    }
+    public get Instances(): BasicObject[] {
+        return this._instances;
+    }
+
+    public addInstance(instance: BasicObject): void {
+        this._instances.push(instance);
     }
 
     public get Geometry(){

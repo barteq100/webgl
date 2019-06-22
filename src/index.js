@@ -15,10 +15,15 @@ function main() {
     let lastTime = 0;
     canvas.width = w;
     canvas.height = h;
-    const gl = canvas.getContext("webgl");
+    const gl = canvas.getContext("webgl2");
     if (!gl) {
         return;
     }
+    // Create a vertex array object (attribute state)
+    var vao = gl.createVertexArray();
+
+    // and make it the one we're currently working with
+    gl.bindVertexArray(vao);
     const camera = new PerspectiveCamera(gl, 1.0471, canvas.width / canvas.height, 1/1000, 200);
     camera.Position = new Vector3(0, 5, 10);
     var obj = new Mesh(gl, camera);

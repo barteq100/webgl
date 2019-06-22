@@ -4,7 +4,7 @@ export class GLAttribute{
     private numOfComp: number;
     private location: GLint;
 
-    constructor(private gl: WebGLRenderingContext, program: WebGLProgram, name: string, numberOfComponents: number) {
+    constructor(private gl: WebGL2RenderingContext, program: WebGLProgram, name: string, numberOfComponents: number) {
         this.gl = gl;
         this.numOfComp = numberOfComponents;
         this.location = gl.getAttribLocation(program, name);

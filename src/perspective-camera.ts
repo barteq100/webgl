@@ -6,7 +6,7 @@ export class PerspectiveCamera extends BasicObject{
     private _projection: Matrix4;
     private _viewMatrix: Matrix4;
 
-    constructor(gl: WebGLRenderingContext, fov: number, aspect: number, near: number, far: number) {
+    constructor(gl: WebGL2RenderingContext, fov: number, aspect: number, near: number, far: number) {
         super(gl);
         this._projection = Matrix4.perspective(fov, aspect, near, far);
         this._viewMatrix = Matrix4.getInverseMatrix4(this.modelMatrix);

@@ -14,29 +14,33 @@ export class Material extends BasicMaterial{
     private positionAttribute: GLAttribute;
     private colorAttribute: GLAttribute;
 
-    constructor(gl: WebGLRenderingContext)  {
+    constructor(gl: WebGL2RenderingContext)  {
         super(gl);
         this._color = new Vector4(0, 0 ,0 , 1);
         this.gl = gl;
         this.vertexShaderScript =
+            '#version 300 es \r\n' +
             '\r\n' +
             'precision highp float;\r\n' +
             'uniform mat4 u_model;\r\n' +
             'uniform mat4 u_view;\r\n' +
             'uniform mat4 u_projection;\r\n' +
-            'attribute vec3 a_position;\r\n' +
-            'attribute vec4 a_color;\r\n' +
-            'varying vec4 v_color;\r\n' +
+            'in vec3 a_position;\r\n' +
+            'in vec4 a_color;\r\n' +
+            'out vec4 v_color;\r\n' +
             'void main(void) {\r\n' +
             '    v_color = a_color;\r\n' +
             '    gl_Position = u_projection * u_view *  u_model * vec4(a_position, 1.0);\r\n' +
             '}\r\n';
 
-        this.fragmentShaderScript = '\r\n' +
+        this.fragmentShaderScript =
+            '#version 300 es \r\n' +
+            '\r\n' +
             'precision highp float;\r\n' +
-            'varying vec4 v_color;\r\n' +
+            'in vec4 v_color;\r\n' +
+            'out vec4 fragColor;\r\n' +
             'void main(void) {\r\n' +
-            '    gl_FragColor = v_color;\r\n' +
+            '    fragColor = v_color;\r\n' +
             '}\r\n';
         this.program = new Program(gl, this.vertexShaderScript, this.fragmentShaderScript);
         this.model = new GLUniform(gl, this.program.program, 'u_model', UniformType.MATRIX4);
@@ -69,5 +73,8 @@ export class Material extends BasicMaterial{
             this.model.Enable(mesh.ModelMatrix.toFloat32List());
             this.gl.drawArrays(mesh.primitiveType, 0, mesh.drawCount);
         }
+    }
+
+    public renderInstances(mesh: Mesh, camera: PerspectiveCamera) {
     }
 }

@@ -12,9 +12,9 @@ export class BasicMaterial {
     protected vertexShaderScript: string;
     protected fragmentShaderScript: string;
     protected program: Program;
-    protected gl: WebGLRenderingContext;
+    protected gl: WebGL2RenderingContext;
 
-    constructor(gl: WebGLRenderingContext) {
+    constructor(gl: WebGL2RenderingContext) {
         this.gl = gl;
     }
 
@@ -22,6 +22,10 @@ export class BasicMaterial {
     }
 
     public renderArray(meshes: Mesh[], camera: PerspectiveCamera) {
+
+    }
+
+    public renderInstances(mesh: Mesh, camera: PerspectiveCamera) {
 
     }
 }

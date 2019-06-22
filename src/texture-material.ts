@@ -15,30 +15,34 @@ export class TextureMaterial extends BasicMaterial{
     private positionAttribute: GLAttribute;
     private uvAttribute: GLAttribute;
 
-    constructor(gl: WebGLRenderingContext, texture: Texture){
+    constructor(gl: WebGL2RenderingContext, texture: Texture){
         super(gl);
         this.texture = texture;
         this.vertexShaderScript =
+            '#version 300 es \r\n' +
             '\r\n' +
             'precision highp float;\r\n' +
             'uniform mat4 u_model;\r\n' +
             'uniform mat4 u_view;\r\n' +
             'uniform mat4 u_projection;\r\n' +
-            'attribute vec3 a_position;\r\n' +
-            'attribute vec2 a_uv;\r\n' +
-            'varying vec2 v_texCoord;\r\n' +
+            'in vec3 a_position;\r\n' +
+            'in vec2 a_uv;\r\n' +
+            'out vec2 v_texCoord;\r\n' +
             'void main(void) {\r\n' +
             '    v_texCoord = a_uv;\r\n' +
             '    gl_Position = u_projection * u_view *  u_model * vec4(a_position, 1.0);\r\n' +
             '    gl_Position /= gl_Position.w ;\r\n' +
             '}\r\n';
 
-        this.fragmentShaderScript = '\r\n' +
+        this.fragmentShaderScript =
+            '#version 300 es \r\n' +
+            '\r\n' +
             'precision highp float;\r\n' +
-            'varying vec2 v_texCoord;\r\n' +
+            'in vec2 v_texCoord;\r\n' +
             'uniform sampler2D u_texture;\r\n' +
+            'out vec4 fragColor;\r\n' +
             'void main(void) {\r\n' +
-            '    gl_FragColor = texture2D(u_texture, v_texCoord);\r\n' +
+            '    fragColor = texture(u_texture, v_texCoord);\r\n' +
             '}\r\n';
 
         this.program = new Program(gl, this.vertexShaderScript, this.fragmentShaderScript);

@@ -3,7 +3,7 @@ import {Vector4} from "./vector4";
 export class Geometry {
     public positions: Float32Array;
     private indices: Float32Array;
-    private gl: WebGLRenderingContext;
+    private gl: WebGL2RenderingContext;
     private normals: Float32Array;
     private _colors: Float32Array;
     private _uvs: Float32Array;
@@ -12,7 +12,7 @@ export class Geometry {
     private _normalsBuffer: WebGLBuffer;
     private _colorsBuffer: WebGLBuffer;
     private _uvsBuffer: WebGLBuffer;
-    constructor(gl: WebGLRenderingContext, positions: number[] = [], indices: number[] = [], normals: number[] = [], colors: number[] = [], uvs: number[] = []) {
+    constructor(gl: WebGL2RenderingContext, positions: number[] = [], indices: number[] = [], normals: number[] = [], colors: number[] = [], uvs: number[] = []) {
         this.gl = gl;
         this.positions = new Float32Array(positions);
         this.indices = new Float32Array(indices);

@@ -12,7 +12,7 @@ export class BasicObject {
    protected _scale: Vector3;
    protected modelMatrix: Matrix4;
 
-    constructor(protected gl: WebGLRenderingContext) {
+    constructor(protected gl: WebGL2RenderingContext) {
         this.gl = gl;
         this._position = new Vector3(0, 0, 0);
         this._rotation = new Vector3(0, 0, 0);

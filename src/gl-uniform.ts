@@ -7,10 +7,10 @@ export enum UniformType {
 }
 
 export class GLUniform {
-    private gl: WebGLRenderingContext;
+    private gl: WebGL2RenderingContext;
     private type: UniformType;
     private location: WebGLUniformLocation;
-    constructor(gl: WebGLRenderingContext, program: WebGLProgram, name: string, type: UniformType) {
+    constructor(gl: WebGL2RenderingContext, program: WebGLProgram, name: string, type: UniformType) {
         this.gl = gl;
         this.location = gl.getUniformLocation(program, name);
         this.type = type;
