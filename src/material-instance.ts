@@ -67,7 +67,6 @@ export class InstanceMaterial extends BasicMaterial {
         this.view.Enable(camera.ViewMatrix.toFloat32List());
         this.projection.Enable(camera.ProjectionMatrix.toFloat32List());
         this.instancesAttribute.Enable(mesh.getInstanceBuffer());
-        this.gl.drawArrays(mesh.primitiveType, 0, mesh.drawCount);
-        this.gl.drawArraysInstanced(this.gl.TRIANGLES, 0, mesh.drawCount, mesh.getInstacesNumber());
+        this.gl.drawArraysInstanced(mesh.primitiveType, 0, mesh.drawCount, mesh.getInstacesNumber());
     }
 }

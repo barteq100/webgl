@@ -3,7 +3,6 @@ import {Vector4} from "./vector4";
 import {Mesh} from "./mesh";
 import {PerspectiveCamera} from "./perspective-camera";
 import {Vector3} from "./vector3";
-import {Texture} from "./texture";
 import {Quaternion} from "./quaternion";
 import {BasicObject} from "./basic-object";
 import {Material} from "./material";
@@ -28,19 +27,20 @@ function main() {
     camera.Position = new Vector3(0, 5, 10);
     var obj = new Mesh(gl, camera);
     obj.material = new Material(gl);
-    obj.Geometry = new Geometry(
-        gl,
-        [
-            -1, 1, 0,
-            -1, -1, 0,
-            1, -1, 0,
-            1, -1, 0,
-            1, 1, 0,
-            -1, 1 ,0
-        ],
-        [],[],[], []
-    );
-        //Geometry.GenerateSphere(gl, 1, 20);
+    obj.Geometry = Geometry.GenerateSphere(gl, 1, 20);
+    //     new Geometry(
+    //     gl,
+    //     [
+    //         -1, 1, 0,
+    //         -1, -1, 0,
+    //         1, -1, 0,
+    //         1, -1, 0,
+    //         1, 1, 0,
+    //         -1, 1 ,0
+    //     ],
+    //     [],[],[], []
+    // );
+    obj.primitiveType = gl.TRIANGLE_STRIP;
     const instance = new BasicObject(gl);
     instance.Position = new Vector3(5, 0, 0);
     const instance2 = new BasicObject(gl);
@@ -83,7 +83,7 @@ function main() {
         //     o.render();
         // }
         //obj.render();
-        obj.render();
+        obj.renderInstances();
         window.requestAnimationFrame(drawScene);
     }
 }
