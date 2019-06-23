@@ -1,13 +1,12 @@
+import {BasicMaterial} from "./basic-material.interface";
 import {Texture} from "./texture";
-import {Program} from "./program";
 import {GLUniform, UniformType} from "./gl-uniform";
 import {GLAttribute} from "./gl-attribute";
-import {BasicMaterial, MaterialType} from "./basic-material.interface";
-import {PerspectiveCamera} from "./perspective-camera";
+import {Program} from "./program";
 import {Mesh} from "./mesh";
-import {TextureInstanceMaterial} from "./texture-instance-material";
+import {PerspectiveCamera} from "./perspective-camera";
 
-export class TextureMaterial extends BasicMaterial{
+export class TextureInstanceMaterial extends BasicMaterial {
     private texture: Texture;
     private model: GLUniform;
     private view: GLUniform;
@@ -15,11 +14,10 @@ export class TextureMaterial extends BasicMaterial{
     private projection: GLUniform;
     private positionAttribute: GLAttribute;
     private uvAttribute: GLAttribute;
-    private instanceMaterial: TextureInstanceMaterial;
+    private instancesAttribute: GLAttribute;
 
     constructor(gl: WebGL2RenderingContext, texture: Texture){
         super(gl);
-        this.instanceMaterial = new TextureInstanceMaterial(gl, texture);
         this.texture = texture;
         this.vertexShaderScript =
             '#version 300 es \r\n' +
@@ -28,12 +26,14 @@ export class TextureMaterial extends BasicMaterial{
             'uniform mat4 u_model;\r\n' +
             'uniform mat4 u_view;\r\n' +
             'uniform mat4 u_projection;\r\n' +
+            'in mat4 a_instanceModel; \r\n' +
             'in vec3 a_position;\r\n' +
             'in vec2 a_uv;\r\n' +
             'out vec2 v_texCoord;\r\n' +
             'void main(void) {\r\n' +
             '    v_texCoord = a_uv;\r\n' +
-            '    gl_Position = u_projection * u_view *  u_model * vec4(a_position, 1.0);\r\n' +
+            '    mat4 model =   a_instanceModel * u_model;\r\n' +
+            '    gl_Position = u_projection * u_view *  model * vec4(a_position, 1.0);\r\n' +
             '    gl_Position /= gl_Position.w ;\r\n' +
             '}\r\n';
 
@@ -54,6 +54,7 @@ export class TextureMaterial extends BasicMaterial{
         this.projection = new GLUniform(gl, this.program.program, 'u_projection', UniformType.MATRIX4);
         this.positionAttribute = new GLAttribute(gl, this.program.program, 'a_position', 3);
         this.uvAttribute = new GLAttribute(gl, this.program.program, 'a_uv', 2);
+        this.instancesAttribute = new GLAttribute(gl, this.program.program, 'a_instanceModel', 16, 1)
     }
 
     render(mesh: Mesh, camera: PerspectiveCamera) {
@@ -63,15 +64,9 @@ export class TextureMaterial extends BasicMaterial{
         this.view.Enable(camera.ViewMatrix.toFloat32List());
         this.projection.Enable(camera.ProjectionMatrix.toFloat32List());
         this.uvAttribute.Enable(mesh.Geometry.uvsBuffer);
+        this.instancesAttribute.Enable(mesh.getInstanceBuffer());
+        this.texture.activate();
         this.textureUniform.Enable();
-        this.gl.drawArrays(mesh.primitiveType, 0, mesh.drawCount);
-        // if(mesh.getInstacesNumber() > 0) {
-        //     this.instanceMaterial.render(mesh, camera);
-        // }
+        this.gl.drawArraysInstanced(this.gl.TRIANGLES, 0, mesh.drawCount, mesh.getInstacesNumber());
     }
-
-    renderInstances(mesh: Mesh, camera: PerspectiveCamera) {
-        this.instanceMaterial.render(mesh, camera);
-    }
-
 }

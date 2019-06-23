@@ -104,11 +104,21 @@ function main() {
         1.0, 0.0,
         1.0, 1.0,
     ]);
+    const instance = new BasicObject(gl);
+    instance.Position = new Vector3(5, 0, 0);
+    const instance2 = new BasicObject(gl);
+    instance2.Position = new Vector3(0, 2, 0);
+    const instance3 = new BasicObject(gl);
+    instance3.Position = new Vector3(0, 0, -5);
     const parent = new BasicObject(gl);
-    parent.Position = new Vector3(0, 0, -5);
+    parent.Position = new Vector3(0, 0, 0);
     obj.VerticesColor = new Vector4(0.5, 0.5, 0.5, 1);
-    obj.Position = new Vector3(5,0,0);
+    obj.Position = new Vector3(0,0,0);
     obj.Parent = parent;
+    obj.addInstance(instance);
+    obj.addInstance(instance2);
+    obj.addInstance(instance3);
+
     camera.lookAt(parent.Position, new Vector3(0, 1, 0));
     var objects = [obj];
     var quat = new Quaternion(1, 0, 0, 0);
@@ -117,8 +127,8 @@ function main() {
         let now = lastTime + 1/60;
         lastTime = now;
         quat.setRotation(Math.sin(now));
-        parent.Rotation = new Vector3(0 , 0, now * 1.5);
-        obj.Rotation = new Vector3(now * 1.5, 0 , 0);
+       // parent.Rotation = new Vector3(0 , 0, now * 1.5);
+        //obj.Rotation = new Vector3(now * 1.5, 0 , 0);
         // Tell WebGL how to convert from clip space to pixels
         gl.viewport(0, 0, canvas.width, canvas.height);
 
@@ -132,9 +142,11 @@ function main() {
         // Enable the depth buffer
         gl.enable(gl.DEPTH_TEST);
         gl.depthFunc(gl.LESS);
-        for (const obj of objects) {
-            obj.render();
-        }
+        // for (const o of objects) {
+        //     o.render();
+        // }
+        //obj.render();
+        obj.renderInstances();
         window.requestAnimationFrame(drawScene);
     }
 }

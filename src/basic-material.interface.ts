@@ -28,4 +28,5 @@ export class BasicMaterial {
     public renderInstances(mesh: Mesh, camera: PerspectiveCamera) {
 
     }
+
 }

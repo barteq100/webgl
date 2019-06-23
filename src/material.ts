@@ -13,6 +13,7 @@ export class Material extends BasicMaterial{
     private projection: GLUniform;
     private positionAttribute: GLAttribute;
     private colorAttribute: GLAttribute;
+    private instancesBuffer: WebGLBuffer;
 
     constructor(gl: WebGL2RenderingContext)  {
         super(gl);
@@ -42,6 +43,7 @@ export class Material extends BasicMaterial{
             'void main(void) {\r\n' +
             '    fragColor = v_color;\r\n' +
             '}\r\n';
+
         this.program = new Program(gl, this.vertexShaderScript, this.fragmentShaderScript);
         this.model = new GLUniform(gl, this.program.program, 'u_model', UniformType.MATRIX4);
         this.view = new GLUniform(gl, this.program.program, 'u_view', UniformType.MATRIX4);
@@ -61,6 +63,7 @@ export class Material extends BasicMaterial{
         this.view.Enable(camera.ViewMatrix.toFloat32List());
         this.projection.Enable(camera.ProjectionMatrix.toFloat32List());
         this.gl.drawArrays(mesh.primitiveType, 0, mesh.drawCount);
+
     }
 
     renderArray(meshes: Mesh[], camera: PerspectiveCamera) {
@@ -73,8 +76,5 @@ export class Material extends BasicMaterial{
             this.model.Enable(mesh.ModelMatrix.toFloat32List());
             this.gl.drawArrays(mesh.primitiveType, 0, mesh.drawCount);
         }
-    }
-
-    public renderInstances(mesh: Mesh, camera: PerspectiveCamera) {
     }
 }
