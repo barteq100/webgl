@@ -5,6 +5,7 @@ import {GLUniform, UniformType} from "./gl-uniform";
 import {BasicMaterial, MaterialType} from "./basic-material.interface";
 import {Mesh} from "./mesh";
 import {PerspectiveCamera} from "./perspective-camera";
+import {InstanceMaterial} from "./material-instance";
 
 export class Material extends BasicMaterial{
     private _color: Vector4;
@@ -13,12 +14,12 @@ export class Material extends BasicMaterial{
     private projection: GLUniform;
     private positionAttribute: GLAttribute;
     private colorAttribute: GLAttribute;
-    private instancesBuffer: WebGLBuffer;
-
+    private instanceMaterial: InstanceMaterial;
     constructor(gl: WebGL2RenderingContext)  {
         super(gl);
         this._color = new Vector4(0, 0 ,0 , 1);
         this.gl = gl;
+        this.instanceMaterial= new InstanceMaterial(gl);
         this.vertexShaderScript =
             '#version 300 es \r\n' +
             '\r\n' +
@@ -76,5 +77,9 @@ export class Material extends BasicMaterial{
             this.model.Enable(mesh.ModelMatrix.toFloat32List());
             this.gl.drawArrays(mesh.primitiveType, 0, mesh.drawCount);
         }
+    }
+
+    renderInstances(mesh: Mesh, camera: PerspectiveCamera) {
+        this.instanceMaterial.render(mesh, camera);
     }
 }

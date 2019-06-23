@@ -4,9 +4,9 @@ import {Mesh} from "./mesh";
 import {PerspectiveCamera} from "./perspective-camera";
 import {Vector3} from "./vector3";
 import {Texture} from "./texture";
-import {TextureMaterial} from "./texture-material";
 import {Quaternion} from "./quaternion";
 import {BasicObject} from "./basic-object";
+import {Material} from "./material";
 
 function main() {
     const canvas = document.getElementById("canvas");
@@ -27,83 +27,20 @@ function main() {
     const camera = new PerspectiveCamera(gl, 1.0471, canvas.width / canvas.height, 1/1000, 200);
     camera.Position = new Vector3(0, 5, 10);
     var obj = new Mesh(gl, camera);
-    var texture = Texture.createFromSrc(gl, 'textures/stars.jpg');
-    obj.material = new TextureMaterial(gl, texture);
-    obj.Geometry = new Geometry(gl, [
-        -1.0,-1.0,-1.0, // triangle 1 : begin
-        -1.0,-1.0, 1.0,
-        -1.0, 1.0, 1.0, // triangle 1 : end
-        1.0, 1.0,-1.0, // triangle 2 : begin
-        -1.0,-1.0,-1.0,
-        -1.0, 1.0,-1.0, // triangle 2 : end
-        1.0,-1.0, 1.0,
-        -1.0,-1.0,-1.0,
-        1.0,-1.0,-1.0,
-        1.0, 1.0,-1.0,
-        1.0,-1.0,-1.0,
-        -1.0,-1.0,-1.0,
-        -1.0,-1.0,-1.0,
-        -1.0, 1.0, 1.0,
-        -1.0, 1.0,-1.0,
-        1.0,-1.0, 1.0,
-        -1.0,-1.0, 1.0,
-        -1.0,-1.0,-1.0,
-        -1.0, 1.0, 1.0,
-        -1.0,-1.0, 1.0,
-        1.0,-1.0, 1.0,
-        1.0, 1.0, 1.0,
-        1.0,-1.0,-1.0,
-        1.0, 1.0,-1.0,
-        1.0,-1.0,-1.0,
-        1.0, 1.0, 1.0,
-        1.0,-1.0, 1.0,
-        1.0, 1.0, 1.0,
-        1.0, 1.0,-1.0,
-        -1.0, 1.0,-1.0,
-        1.0, 1.0, 1.0,
-        -1.0, 1.0,-1.0,
-        -1.0, 1.0, 1.0,
-        1.0, 1.0, 1.0,
-        -1.0, 1.0, 1.0,
-        1.0,-1.0, 1.0
-    ], [], [], [], [
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-    ]);
+    obj.material = new Material(gl);
+    obj.Geometry = new Geometry(
+        gl,
+        [
+            -1, 1, 0,
+            -1, -1, 0,
+            1, -1, 0,
+            1, -1, 0,
+            1, 1, 0,
+            -1, 1 ,0
+        ],
+        [],[],[], []
+    );
+        //Geometry.GenerateSphere(gl, 1, 20);
     const instance = new BasicObject(gl);
     instance.Position = new Vector3(5, 0, 0);
     const instance2 = new BasicObject(gl);
@@ -112,8 +49,8 @@ function main() {
     instance3.Position = new Vector3(0, 0, -5);
     const parent = new BasicObject(gl);
     parent.Position = new Vector3(0, 0, 0);
-    obj.VerticesColor = new Vector4(0.5, 0.5, 0.5, 1);
-    obj.Position = new Vector3(0,0,0);
+    obj.VerticesColor = new Vector4(0.5, 0.5,0.5, 1);
+    obj.Position = new Vector3(0,0,-5);
     obj.Parent = parent;
     obj.addInstance(instance);
     obj.addInstance(instance2);
@@ -137,16 +74,16 @@ function main() {
 
         //Turn on culling. By default backfacing triangles
         // will be culled.
-        gl.enable(gl.CULL_FACE);
+        //gl.enable(gl.CULL_FACE);
 
         // Enable the depth buffer
-        gl.enable(gl.DEPTH_TEST);
-        gl.depthFunc(gl.LESS);
+        //gl.enable(gl.DEPTH_TEST);
+        //gl.depthFunc(gl.LESS);
         // for (const o of objects) {
         //     o.render();
         // }
         //obj.render();
-        obj.renderInstances();
+        obj.render();
         window.requestAnimationFrame(drawScene);
     }
 }

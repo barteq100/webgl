@@ -42,7 +42,7 @@ export class Geometry {
 
     public set color(color: Vector4) {
         const newColors: number[] = [];
-        for (let i = 0; i < this.positions.length; i++) {
+        for (let i = 0; i < this.positions.length / 3; i++) {
             newColors.push(color.x, color.y, color.z, color.w);
         }
         this._colors = new Float32Array(newColors);
@@ -71,6 +71,62 @@ export class Geometry {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._uvsBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this._uvs, this.gl.STATIC_DRAW);
         return this._uvsBuffer;
+    }
+
+    static GenerateSphere(gl: WebGL2RenderingContext, radius: number, detail: number) {
+        // Based on Paul Bourke's geometry article
+        var vertices = [];
+        var normals = [];
+        var texcoords = [];
+
+        var TWOPI = 6.28318530717958;
+        var PIDIV2 = 1.57079632679489;
+
+        var p = detail;
+        var r = radius;
+        var cx = 0;
+        var cy = 0;
+        var cz = 0;
+
+        for( var i = 0; i < p/2; ++i )
+        {
+
+            var theta1 = i * TWOPI / p - PIDIV2;
+            var theta2 = (i + 1) * TWOPI / p - PIDIV2;
+
+            for(var j = 0; j <= p; ++j )
+            {
+                var theta3 = j * TWOPI / p;
+
+                var ex = Math.cos(theta2) * Math.cos(theta3);
+                var ey = Math.sin(theta2);
+                var ez = Math.cos(theta2) * Math.sin(theta3);
+                var px = cx + r * ex;
+                var py = cy + r * ey;
+                var pz = cz + r * ez;
+                var tu  = -(j/p);
+                var tv  = 2*(i+1)/p;
+
+                vertices.push(px, py, pz);
+                normals.push(ex, ey, ez);
+                texcoords.push(tu, -tv);
+
+                ex = Math.cos(theta1) * Math.cos(theta3);
+                ey = Math.sin(theta1);
+                ez = Math.cos(theta1) * Math.sin(theta3);
+                px = cx + r * ex;
+                py = cy + r * ey;
+                pz = cz + r * ez;
+                tu  = -(j/p);
+                tv  = 2*i/p;
+
+                vertices.push(px, py, pz);
+                normals.push(ex, ey, ez);
+                texcoords.push(tu, -tv);
+            }
+        }
+
+        return new Geometry(gl, vertices, [], normals, [], texcoords );
     }
 
 
