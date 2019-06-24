@@ -6,6 +6,9 @@ import {Vector3} from "./vector3";
 import {Quaternion} from "./quaternion";
 import {BasicObject} from "./basic-object";
 import {Material} from "./material";
+import {RenderPass} from "./render-pass";
+import {Texture} from "./texture";
+import {TextureMaterial} from "./texture-material";
 
 function main() {
     const canvas = document.getElementById("canvas");
@@ -25,9 +28,99 @@ function main() {
     gl.bindVertexArray(vao);
     const camera = new PerspectiveCamera(gl, 1.0471, canvas.width / canvas.height, 1/1000, 200);
     camera.Position = new Vector3(0, 5, 10);
-    var obj = new Mesh(gl, camera);
-    obj.material = new Material(gl);
-    obj.Geometry = Geometry.GenerateSphere(gl, 1, 20);
+    const obj = new Mesh(gl, camera);
+    obj.Geometry = new Geometry(gl, [
+        // Front face
+        -1.0, -1.0,  1.0,
+        1.0, -1.0,  1.0,
+        1.0,  1.0,  1.0,
+        1.0,  1.0,  1.0,
+        -1.0,  1.0,  1.0,
+        -1.0, -1.0,  1.0,
+
+        // Back face
+        -1.0, -1.0, -1.0,
+        -1.0,  1.0, -1.0,
+        1.0,  1.0, -1.0,
+        1.0,  1.0, -1.0,
+        1.0, -1.0, -1.0,
+        -1.0, -1.0, -1.0,
+
+        // Top face
+        -1.0,  1.0, -1.0,
+        -1.0,  1.0,  1.0,
+        1.0,  1.0,  1.0,
+        1.0,  1.0,  1.0,
+        1.0,  1.0, -1.0,
+        -1.0,  1.0, -1.0,
+
+        // Bottom face
+        -1.0, -1.0, -1.0,
+        1.0, -1.0, -1.0,
+        1.0, -1.0,  1.0,
+        1.0, -1.0,  1.0,
+        -1.0, -1.0,  1.0,
+        -1.0, -1.0, -1.0,
+
+        // Right face
+        1.0, -1.0, -1.0,
+        1.0,  1.0, -1.0,
+        1.0,  1.0,  1.0,
+        1.0,  1.0,  1.0,
+        1.0, -1.0,  1.0,
+        1.0, -1.0, -1.0,
+
+        // Left face
+        -1.0, -1.0, -1.0,
+        -1.0, -1.0,  1.0,
+        -1.0,  1.0,  1.0,
+        -1.0,  1.0,  1.0,
+        -1.0,  1.0, -1.0,
+        -1.0, -1.0, -1.0,
+
+    ], [], [], [], [
+        0,0,
+        1,0,
+        1,1,
+        1,1,
+        0,1,
+        0,0,
+
+        0,0,
+        1,0,
+        1,1,
+        1,1,
+        0,1,
+        0,0,
+
+        0,0,
+        1,0,
+        1,1,
+        1,1,
+        0,1,
+        0,0,
+
+        0,0,
+        1,0,
+        1,1,
+        1,1,
+        0,1,
+        0,0,
+
+        0,0,
+        1,0,
+        1,1,
+        1,1,
+        0,1,
+        0,0,
+
+        0,0,
+        1,0,
+        1,1,
+        1,1,
+        0,1,
+        0,0
+    ]);
     //     new Geometry(
     //     gl,
     //     [
@@ -40,50 +133,53 @@ function main() {
     //     ],
     //     [],[],[], []
     // );
-    obj.primitiveType = gl.TRIANGLE_STRIP;
-    const instance = new BasicObject(gl);
-    instance.Position = new Vector3(5, 0, 0);
-    const instance2 = new BasicObject(gl);
-    instance2.Position = new Vector3(0, 2, 0);
-    const instance3 = new BasicObject(gl);
-    instance3.Position = new Vector3(0, 0, -5);
-    const parent = new BasicObject(gl);
-    parent.Position = new Vector3(0, 0, 0);
     obj.VerticesColor = new Vector4(0.5, 0.5,0.5, 1);
     obj.Position = new Vector3(0,0,-5);
-    obj.Parent = parent;
-    obj.addInstance(instance);
-    obj.addInstance(instance2);
-    obj.addInstance(instance3);
 
-    camera.lookAt(parent.Position, new Vector3(0, 1, 0));
-    var objects = [obj];
-    var quat = new Quaternion(1, 0, 0, 0);
+
+
+    camera.lookAt(obj.Position, new Vector3(0, 1, 0));
+    const renderPass = new RenderPass(gl, 512, 512);
+    const renderPassCamera = new PerspectiveCamera(gl, 1.0471, 512 / 512, 1/1000, 200);
+    renderPassCamera.Position = new Vector3(0, 0, 3);
+    const sphere = new Mesh(gl, renderPassCamera);
+    sphere.Geometry = Geometry.GenerateSphere(gl, 1, 20);
+    const startsTexture = Texture.createFromSrc(gl, 'textures/stars.jpg');
+    sphere.material = new TextureMaterial(gl, startsTexture);
+    sphere.primitiveType = gl.TRIANGLE_STRIP;
+    sphere.VerticesColor = new Vector4(0.7, 0.1, 0.4, 1);
+    sphere.Position = new Vector3(0, 0, 0);
+    renderPassCamera.lookAt(sphere.Position, new Vector3(0, 1, 0));
+    const afterPassTexture = new Texture(gl);
+    obj.material = new TextureMaterial(gl, afterPassTexture);
     drawScene(0);
     function drawScene(deltaTime) {
         let now = lastTime + 1/60;
         lastTime = now;
-        quat.setRotation(Math.sin(now));
+        sphere.Rotation = new Vector3(now * 1.5, now * 1.5, now * 1.5);
+        afterPassTexture.texture = renderPass.renderTexture([sphere]);
+
        // parent.Rotation = new Vector3(0 , 0, now * 1.5);
-        //obj.Rotation = new Vector3(now * 1.5, 0 , 0);
+        obj.Rotation = new Vector3(now * 1.5, 0 , 0);
         // Tell WebGL how to convert from clip space to pixels
         gl.viewport(0, 0, canvas.width, canvas.height);
 
         // Clear the canvas.
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         //Turn on culling. By default backfacing triangles
         // will be culled.
-        //gl.enable(gl.CULL_FACE);
+        gl.enable(gl.CULL_FACE);
 
         // Enable the depth buffer
-        //gl.enable(gl.DEPTH_TEST);
-        //gl.depthFunc(gl.LESS);
+        gl.enable(gl.DEPTH_TEST);
+        gl.depthFunc(gl.LESS);
+        gl.clearColor(1, 1, 1, 1);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         // for (const o of objects) {
         //     o.render();
         // }
         //obj.render();
-        obj.renderInstances();
+        obj.render();
         window.requestAnimationFrame(drawScene);
     }
 }

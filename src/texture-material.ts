@@ -63,6 +63,7 @@ export class TextureMaterial extends BasicMaterial{
         this.view.Enable(camera.ViewMatrix.toFloat32List());
         this.projection.Enable(camera.ProjectionMatrix.toFloat32List());
         this.uvAttribute.Enable(mesh.Geometry.uvsBuffer);
+        this.texture.activate();
         this.textureUniform.Enable();
         this.gl.drawArrays(mesh.primitiveType, 0, mesh.drawCount);
         // if(mesh.getInstacesNumber() > 0) {

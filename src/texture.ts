@@ -5,14 +5,18 @@ export class Texture {
     private gl: WebGL2RenderingContext;
     constructor(gl: WebGL2RenderingContext) {
        this.gl = gl;
-       this.texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, this.texture);
+
+    }
+
+    public static createFromSrc(gl: WebGL2RenderingContext, url: string): Texture {
+        const webglTexture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, webglTexture);
         // Fill the texture with a 1x1 blue pixel.
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
             new Uint8Array([0, 0, 255, 255]));
-    }
-    public static createFromSrc(gl: WebGL2RenderingContext, url: string): Texture {
+
         var texture = new Texture(gl);
+        texture.texture = webglTexture;
         var image = new Image();
         image.src = url;
         image.addEventListener('load', function() {
