@@ -32,7 +32,7 @@ export class TextureInstanceMaterial extends BasicMaterial {
             'out vec2 v_texCoord;\r\n' +
             'void main(void) {\r\n' +
             '    v_texCoord = a_uv;\r\n' +
-            '    mat4 model =  a_instanceModel * u_model;\r\n' +
+            '    mat4 model = u_model * a_instanceModel ;\r\n' +
             '    gl_Position = u_projection * u_view * model * vec4(a_position, 1.0);\r\n' +
             '    gl_Position /= gl_Position.w ;\r\n' +
             '}\r\n';

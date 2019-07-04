@@ -24,6 +24,28 @@ export class Vector3 {
         return this;
     }
 
+    Add(v: Vector3) {
+        this.x += v.x;
+        this.y += v.y;
+        this.z += v.z;
+        return this;
+    }
+
+    MultiplyByFloat(n: number){
+        this.x *= n;
+        this.y *= n;
+        this.z *= n;
+        return this;
+    }
+
+    SqrLength(): number {
+        return this.x * this.x + this.y * this.y + this.z * this.z;
+    }
+
+    static sqrDistance(a: Vector3, b: Vector3): number {
+        return Vector3.Sub(a,b).SqrLength();
+    }
+
     Cross(b: Vector3) {
         return new Vector3(this.y * b.z - this.z * b.y, this.z * b.x - this.x * b.z, this.x * b.y - this.y * b.x);
     }

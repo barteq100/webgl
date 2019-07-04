@@ -21,20 +21,22 @@ export class Mesh extends BasicObject {
         this.drawCount = this._geometry.positions.length / 3;
         this.instancesBuffer = gl.createBuffer();
         gl.bindBuffer(this.gl.ARRAY_BUFFER, this.instancesBuffer);
-        gl.bufferData(this.gl.ARRAY_BUFFER, this.instancesData, this.gl.STATIC_DRAW);
+        gl.bufferData(this.gl.ARRAY_BUFFER, this.instancesData, this.gl.DYNAMIC_DRAW);
 
     }
 
-    private recalculateInstancesData(){
+    public recalculateInstancesData(){
         const data: number[] = [];
         this._instances.forEach((v) =>{
             data.push(...(v.ModelMatrix.toFloat32List()));
         });
         this.instancesData = new Float32Array(data);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.instancesBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instancesData, this.gl.STATIC_DRAW);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instancesData, this.gl.DYNAMIC_DRAW);
     }
-
+    public get Instances(): BasicObject[] {
+        return this._instances;
+    }
     public removeInstance(instance: BasicObject): void {
       this._instances = this._instances.filter((v) => v !== instance);
       this.recalculateInstancesData();
