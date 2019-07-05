@@ -170,21 +170,11 @@ function main() {
         const d = deltaTime * 0.001;
         const instances = obj.Instances;
         for(const instance of instances) {
-            const currentRotation = instance.Rotation;
-            // currentRotation.x = now * 0.1;
-            // currentRotation.y = now * 0.1;
-            // currentRotation.z = now * 0.1;
-            const dist = Vector3.sqrDistance(instance.Position, obj.Position);
-
             const sign = Math.sign(Math.sin(d * 0.8 * Math.PI));
             let moveDirection = Vector3.Sub(instance.Position, obj.Position).Normalize().MultiplyByFloat(delta * sign * 0.01 );
-            // if(dist > 100) {
-            //    moveDirection = Vector3.Sub(instance.Position, obj.Position).Normalize().MultiplyByFloat(-delta * 0.01 );
-            // }
-           // instance.Rotation = currentRotation;
             instance.Position = instance.Position.Add(moveDirection);
         }
-        camera.Position = new Vector3(Math.cos(d * 0.8 * Math.PI) * 0.1, 0, 10 + (Math.sin(d  * 0.8 * Math.PI) * Math.cos(d * 0.8 * Math.PI) ));
+        camera.Position =  new Vector3(obj.Position.x + Math.cos(d)  * 20, 0, obj.Position.z +  (20 * Math.sin(d) ));
         camera.lookAt(obj.Position, new Vector3(0, 1, 0));
         obj.recalculateInstancesData();
 
